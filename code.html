@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LANTIK-PNS - Kab. Lima Puluh Kota</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  <!-- Google Font Modern: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif !important; background-color: #f8fafc; margin: 0; }
+    .glass-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.85rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -2px rgba(0,0,0,0.02); }
+    
+    .animate-marquee-smooth {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      will-change: transform;
+      animation: marquee-smooth 35s linear infinite;
+    }
+    .animate-marquee-smooth:hover {
+      animation-play-state: paused;
+    }
+    @keyframes marquee-smooth {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    
+    .table-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .table-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+    .table-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .table-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    .custom-table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .custom-table th {
+      background-color: #0f172a;
+      color: #94a3b8;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 10px 12px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #1e293b;
+    }
+    .custom-table td {
+      padding: 9px 12px;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+    .custom-table tbody tr {
+      transition: all 0.2s ease;
+    }
+    .custom-table tbody tr:hover {
+      background-color: #f8fafc !important;
+    }
+
+    .live-clock-badge {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse-green 2s infinite;
+    }
+
+    @keyframes pulse-green {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .header-auto-hide {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .nav-glassmorphism {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0px;
+    }
+
+    .segmented-control-track {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      padding: 2px;
+    }
+
+    .pill-btn {
+      border-radius: 9999px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #cbd5e1;
+    }
+
+    .pill-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .pill-btn.active-pill {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .sleek-profile-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      padding: 2px 10px 2px 3px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .sleek-profile-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(16, 185, 129, 0.5);
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.25);
+    }
+
+    .sleek-avatar-wrap {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      padding: 1px;
+    }
+
+    .sleek-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #34d399;
+      font-size: 10px;
+    }
+
+    .sleek-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34d399;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .form-input-compact {
+      width: 100%;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.4rem;
+      padding: 0.3rem 0.45rem;
+      font-size: 0.72rem;
+      color: #1e293b;
+      transition: all 0.2s;
+    }
+    .form-input-compact:focus {
+      background-color: #ffffff;
+      border-color: #2563eb;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+    .form-label-compact {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 0.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    /* Style tabel khusus batch: Seluruh nilai terlihat utuh tanpa terpotong */
+    .batch-table-input {
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.35rem;
+      padding: 0.3rem 0.45rem;
+      font-size: 0.72rem;
+      color: #0f172a;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .batch-table-input:focus {
+      border-color: #2563eb;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    datalist {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .form-tab-btn.active-tab {
+      background-color: #ffffff;
+      color: #1e293b;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+  </style>
+
+  <style id="verifikator-guide-visibility">
+    body.verifikator-mode #publicGuideCardWrapper {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body class="text-slate-800 antialiased min-h-screen flex flex-col bg-slate-100 relative">
+
+  <!-- MAIN CONTENT AREA -->
+  <div id="mainContent" class="flex-1 flex flex-col w-full min-w-0 min-h-screen">
+
+    <!-- HEADER PRO-EXECUTIVE -->
+    <header id="mainHeader" class="header-auto-hide bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 border-b-2 border-amber-400 pt-3 shadow-2xl sticky top-0 z-30 text-white flex flex-col items-center gap-2.5">
+      
+      <!-- LOGO DAN BRANDING -->
+      <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 flex flex-row items-center justify-center gap-4 sm:gap-6">
+        <div class="flex items-center space-x-2 sm:space-x-4">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 p-1.5 bg-white/95 backdrop-blur rounded-xl shadow-lg border border-amber-400/40 transition hover:scale-105 flex items-center justify-center shrink-0">
+            <img src="https://i.ibb.co.com/1f9QFpXx/Lambang-Kabupaten-Lima-Puluh-Kota.png" alt="Logo Kab" class="w-full h-full object-contain">
+          </div>
+          
+          <div class="h-12 sm:h-16 w-[2px] bg-gradient-to-b from-transparent via-amber-400/60 to-transparent"></div>
+          
+          <div class="w-16 h-16 sm:w-20 sm:h-20 p-1.5 bg-white/95 backdrop-blur rounded-xl shadow-lg border border-amber-400/40 transition hover:scale-105 flex items-center justify-center shrink-0">
+            <img src="https://i.ibb.co.com/JWP8MDbj/ChatGPT-Image-17-Agu-2026-11-35-22.png" alt="Logo LANTIK-PNS" class="w-full h-full object-contain">
+          </div>
+        </div>
+
+        <div class="h-12 sm:h-16 w-[2px] bg-gradient-to-b from-transparent via-amber-400/60 to-transparent"></div>
+
+        <div class="text-left">
+          <h1 class="text-xl sm:text-2xl lg:text-3xl font-black tracking-wider text-white drop-shadow-md leading-none">
+            LANTIK<span class="text-amber-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">-PNS</span>
+          </h1>
+          <p class="text-[9px] sm:text-[11px] font-bold text-blue-200 uppercase tracking-widest mt-1 hidden sm:block">
+            Layanan Terpadu Informasi Kenaikan Pangkat PNS
+          </p>
+          <p class="text-[9px] sm:text-[10px] font-semibold text-amber-400/90 flex items-center gap-1 mt-0.5 sm:mt-0">
+            <i class="fa-solid fa-location-dot text-[9px]"></i> Kab. Lima Puluh Kota
+          </p>
+        </div>
+      </div>
+
+      <!-- MARQUEE -->
+      <div class="w-full max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="relative flex items-center bg-slate-950/60 backdrop-blur-md rounded-full border border-amber-400/30 px-2 py-1 shadow-inner overflow-hidden">
+          <div class="z-10 shrink-0 flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-[10px] sm:text-xs shadow-md uppercase tracking-wider">
+            <i class="fa-solid fa-bullhorn text-slate-950 animate-bounce"></i>
+            <span>Informasi</span>
+          </div>
+
+          <div class="overflow-hidden whitespace-nowrap w-full ml-3 relative">
+            <div class="animate-marquee-smooth flex items-center gap-6 text-[11px] sm:text-xs font-semibold">
+              <span class="text-white flex items-center gap-2">
+                Selamat datang di <strong class="text-amber-300 font-bold">LANTIK-PNS</strong> (Layanan Terpadu Informasi Kenaikan Pangkat PNS) Kabupaten Lima Puluh Kota
+              </span>
+              <span class="h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0 animate-ping"></span>
+              <span class="text-blue-100 flex items-center gap-1.5">
+                <i class="fa-solid fa-magnifying-glass text-amber-400 text-[10px]"></i>
+                Gunakan fitur pencarian NIP atau Nama pada tabel di bawah untuk mengecek status usulan Anda secara cepat.
+              </span>
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="text-slate-200 flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-emerald-400 text-[10px]"></i>
+                Verifikator silakan <strong class="text-amber-400">Login</strong> untuk mengakses pengelolaan data usulan.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAVBAR -->
+      <nav id="mainNavbar" class="nav-glassmorphism w-full px-3 sm:px-6 py-2 transition-all">
+        <div class="w-full flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
+          
+          <div class="segmented-control-track flex items-center gap-1 shrink-0">
+            <a href="#sectionDashboard" onclick="setActivePill(this);" class="pill-btn active-pill flex items-center gap-1.5 px-3 py-1 text-xs font-semibold">
+              <i class="fa-solid fa-chart-pie text-[11px]"></i>
+              <span>Dashboard</span>
+            </a>
+
+            <div id="verifikatorMenuSection" class="hidden items-center gap-1 pl-1 border-l border-white/10">
+              <button onclick="openFormModal('single', true); setActivePill(this)" class="pill-btn flex items-center gap-1.5 px-3 py-1 text-xs font-semibold">
+                <i class="fa-solid fa-square-plus text-[11px] text-blue-400"></i>
+                <span>Input Data Usulan</span>
+              </button>
+              <button onclick="toggleAuditLogModal();" class="pill-btn flex items-center gap-1.5 px-3 py-1 text-xs font-semibold">
+                <i class="fa-solid fa-clock-rotate-left text-[11px] text-amber-400"></i>
+                <span>Audit Log</span>
+              </button>
+            </div>
+
+            <button onclick="exportToExcel();" class="pill-btn flex items-center gap-1.5 px-3 py-1 text-xs font-semibold">
+              <i class="fa-solid fa-file-excel text-[11px] text-emerald-400"></i>
+              <span>Export Excel</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2.5 shrink-0">
+            <div id="userInfo" title="Status Sesi Verifikator Aktif" class="hidden items-center gap-2 sleek-profile-card">
+              <div class="sleek-avatar-wrap">
+                <div class="sleek-avatar-inner">
+                  <i class="fa-solid fa-user-shield"></i>
+                </div>
+              </div>
+              
+              <div class="flex flex-col">
+                <span class="text-[10px] font-bold text-slate-100 leading-tight">Verifikator</span>
+                <div class="flex items-center gap-1 mt-0.5">
+                  <span class="sleek-status-badge">
+                    <span class="h-1 w-1 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Active Mode
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <button id="btnLoginNav" onclick="openLoginModal()" class="px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold rounded-full text-xs flex items-center gap-1.5 shadow-md shadow-amber-500/20 active:scale-95 transition whitespace-nowrap">
+              <i class="fa-solid fa-shield-halved text-[11px]"></i>
+              <span>Login Verifikator</span>
+            </button>
+
+            <button id="btnLogout" onclick="handleLogout()" class="hidden px-3 py-1 bg-rose-500/10 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 rounded-full text-xs font-bold flex items-center gap-1 active:scale-95 transition whitespace-nowrap">
+              <i class="fa-solid fa-power-off text-[11px]"></i>
+              <span>Logout</span>
+            </button>
+          </div>
+
+        </div>
+      </nav>
+
+    </header>
+
+    <main class="flex-1 p-3 sm:p-4 md:p-5 space-y-4 sm:space-y-5">
+
+      <!-- PETUNJUK PENGGUNAAN COMPACT -->
+      <div id="publicGuideCardWrapper" class="mb-4">
+        <div id="publicGuideCard" data-public-guide="true" class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 border border-blue-500/30 shadow-md transition-all duration-300">
+          <div class="relative z-10 px-3.5 py-3 sm:px-4 sm:py-3.5">
+            <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-2.5">
+              <div class="flex items-center gap-2.5">
+                <div class="shrink-0 w-8 h-8 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center">
+                  <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xs"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.2 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[9px] font-bold uppercase tracking-wider">Panduan Cepat</span>
+                    <h2 class="text-xs sm:text-sm font-extrabold text-white">Petunjuk Penggunaan Dashboard</h2>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="openGuideModal()" class="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[10px] sm:text-xs shadow-md flex items-center gap-1.5 transition active:scale-95 whitespace-nowrap">
+                  <i class="fa-solid fa-book-open"></i>
+                  <span class="hidden sm:inline">Panduan Lengkap</span>
+                  <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                </button>
+
+                <button onclick="togglePublicGuideContent()" title="Sembunyikan/Tampilkan Rincian" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white border border-white/10 transition active:scale-95">
+                  <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" id="iconToggleGuide"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="guideContentBody" class="hidden mt-2.5 transition-all duration-300">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div class="p-2 sm:p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 text-[9px] font-black flex items-center justify-center">1</span>
+                    <h4 class="text-[11px] font-bold text-white truncate">Cari NIP/Nama</h4>
+                  </div>
+                  <p class="text-[10px] text-slate-300 leading-tight">Gunakan pencarian di tabel bawah.</p>
+                </div>
+
+                <div class="p-2 sm:p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 text-[9px] font-black flex items-center justify-center">2</span>
+                    <h4 class="text-[11px] font-bold text-white truncate">Gunakan Filter</h4>
+                  </div>
+                  <p class="text-[10px] text-slate-300 leading-tight">Saring Periode, Unit, atau Status.</p>
+                </div>
+
+                <div class="p-2 sm:p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 text-[9px] font-black flex items-center justify-center">3</span>
+                    <h4 class="text-[11px] font-bold text-white truncate">Pantau Status</h4>
+                  </div>
+                  <p class="text-[10px] text-slate-300 leading-tight">Cek tahapan usulan real-time.</p>
+                </div>
+
+                <div class="p-2 sm:p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 text-[9px] font-black flex items-center justify-center">4</span>
+                    <h4 class="text-[11px] font-bold text-white truncate">Verifikator</h4>
+                  </div>
+                  <p class="text-[10px] text-slate-300 leading-tight">Login untuk kelola & update data.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="appAlert" class="hidden p-3 rounded-xl font-medium text-xs sm:text-sm flex items-center justify-between"></div>
+
+      <!-- DASHBOARD MONITORING -->
+      <section id="sectionDashboard" class="space-y-4">
+        
+        <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-gauge-high text-blue-600"></i>
+            <span class="text-xs font-bold text-slate-800 uppercase tracking-wide">Ringkasan Dashboard</span>
+          </div>
+          <button onclick="toggleDashboardCharts()" id="btnToggleDashboard" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-eye-slash text-slate-500"></i> <span id="btnToggleDashboardText">Sembunyikan Grafik & KPI</span>
+          </button>
+        </div>
+
+        <div id="dashboardVisualArea" class="space-y-4 transition-all duration-300">
+          <div class="glass-card p-3 sm:p-4">
+            <div class="flex items-center justify-between mb-2.5">
+              <h2 class="text-xs font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-filter text-blue-500"></i> Filter Dashboard
+              </h2>
+              <button onclick="resetFilters()" class="text-xs text-blue-600 hover:underline">Reset Semua Filter</button>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3">
+              <div>
+                <label class="block text-[10px] font-medium text-slate-500 mb-1">Periode KP</label>
+                <select id="filterPeriode" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg p-2"><option value="ALL">Semua Periode</option></select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-slate-500 mb-1">Unit Kerja</label>
+                <select id="filterUnit" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg p-2"><option value="ALL">Semua Unit Kerja</option></select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-slate-500 mb-1">Status Akhir</label>
+                <select id="filterStatus" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg p-2"><option value="ALL">Semua Status</option></select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-slate-500 mb-1">Jenis KP</label>
+                <select id="filterJenis" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg p-2"><option value="ALL">Semua Jenis KP</option></select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-slate-500 mb-1">Verifikator</label>
+                <select id="filterVerifikator" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg p-2"><option value="ALL">Semua Verifikator</option></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI CARDS SCORE CARDS --> 
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+            <div class="glass-card p-3 border-l-4 border-l-blue-500">
+              <p class="text-[10px] font-medium text-slate-500 uppercase">Total Usulan</p>
+              <h3 id="kpiTotal" class="text-lg sm:text-xl font-bold text-slate-800 mt-0.5">0</h3>
+            </div>
+            <div class="glass-card p-3 border-l-4 border-l-emerald-500">
+              <p class="text-[10px] font-medium text-slate-500 uppercase">MS</p>
+              <h3 id="kpiMS" class="text-lg sm:text-xl font-bold text-emerald-600 mt-0.5">0</h3>
+            </div>
+            <div class="glass-card p-3 border-l-4 border-l-amber-500">
+              <p class="text-[10px] font-medium text-slate-500 uppercase">BTS</p>
+              <h3 id="kpiBTS" class="text-lg sm:text-xl font-bold text-amber-600 mt-0.5">0</h3>
+            </div>
+            <div class="glass-card p-3 border-l-4 border-l-rose-500">
+              <p class="text-[10px] font-medium text-slate-500 uppercase">TMS</p>
+              <h3 id="kpiTMS" class="text-lg sm:text-xl font-bold text-rose-600 mt-0.5">0</h3>
+            </div>
+            <div class="glass-card p-3 border-l-4 border-l-cyan-500">
+              <p class="text-[10px] font-medium text-slate-500 uppercase">Pertek BKN</p>
+              <h3 id="kpiPertek" class="text-lg sm:text-xl font-bold text-cyan-600 mt-0.5">0</h3>
+            </div>
+            <div class="glass-card p-3 border-l-4 border-l-purple-500">
+              <p class="text-[10px] font-medium text-slate-500 uppercase">SK Ditetapkan</p>
+              <h3 id="kpiSK" class="text-lg sm:text-xl font-bold text-purple-600 mt-0.5">0</h3>
+            </div>
+          </div>
+
+          <!-- CHARTS -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="glass-card p-3.5">
+              <h3 class="text-xs font-semibold text-slate-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-chart-bar text-blue-500"></i> Status per Unit Kerja</h3>
+              <div class="h-56 sm:h-64"><canvas id="chartUnit"></canvas></div>
+            </div>
+            <div class="glass-card p-3.5">
+              <h3 class="text-xs font-semibold text-slate-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-500"></i> Distribusi Tahapan Usulan</h3>
+              <div class="h-56 sm:h-64"><canvas id="chartStatusBerkas"></canvas></div>
+            </div>
+            <div class="glass-card p-3.5">
+              <h3 class="text-xs font-semibold text-slate-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-chart-column text-blue-500"></i> Komposisi Jenis KP</h3>
+              <div class="h-48 sm:h-52"><canvas id="chartJenisKP"></canvas></div>
+            </div>
+            <div class="glass-card p-3.5">
+              <h3 class="text-xs font-semibold text-slate-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-user-check text-blue-500"></i> Beban Kerja Verifikator</h3>
+              <div class="h-48 sm:h-52"><canvas id="chartVerifikator"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLE DATA UTAMA -->
+        <div class="glass-card p-4 sm:p-5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                  <i class="fa-solid fa-table-list text-sm"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-slate-800">Daftar Usulan Kenaikan Pangkat</h3>
+                  <p class="text-[11px] text-slate-500">Menampilkan detail usulan pegawai secara real-time</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto">
+              <div class="relative w-full sm:w-48">
+                <select id="tableFilterPeriode" onchange="handleTableFilterChange()" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2.5 pr-8 focus:ring-2 focus:ring-blue-500 focus:bg-white font-medium">
+                  <option value="ALL">Semua Periode KP</option>
+                </select>
+              </div>
+
+              <div class="relative w-full sm:w-64">
+                <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Cari Nama / NIP..." class="w-full bg-slate-50 border border-slate-200 text-xs rounded-xl p-2.5 pl-9 focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-scroll overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+            <table class="w-full custom-table min-w-[1150px]">
+              <thead>
+                <tr>
+                  <th class="text-left rounded-tl-xl whitespace-nowrap">Tanggal Usul</th>
+                  <th class="text-left whitespace-nowrap">Pegawai / NIP</th>
+                  <th class="text-left min-w-[200px]">Unit Kerja</th>
+                  <th class="text-center whitespace-nowrap">Golongan</th>
+                  <th class="text-left whitespace-nowrap">Jenis & Periode KP</th>
+                  <th class="text-left whitespace-nowrap">Tahapan Usulan</th>
+                  <th class="text-center whitespace-nowrap">Status Akhir</th>
+                  <th class="text-left whitespace-nowrap">Verifikator</th>
+                  <th class="text-left min-w-[220px]">Catatan</th>
+                  <th class="text-center action-header hidden rounded-tr-xl whitespace-nowrap">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="divide-y divide-slate-100 bg-white"></tbody>
+            </table>
+          </div>
+
+          <div id="paginationContainer" class="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500">
+            <div id="paginationInfo" class="text-[11px] font-medium text-slate-500">Menampilkan 0 - 0 dari 0 data</div>
+            <div id="paginationButtons" class="flex items-center space-x-1"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER UTAMA -->
+    <footer class="mt-auto bg-slate-900 border-t border-slate-800 text-white py-6 px-4 sm:px-6">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <div class="text-center md:text-left">
+          <p class="text-xs font-bold text-slate-200">
+            LANTIK-PNS <span class="text-amber-400">&copy; 2026</span>
+          </p>
+          <p class="text-[11px] text-slate-400 mt-0.5">
+            Badan Kepegawaian dan Pengembangan SDM Kabupaten Lima Puluh Kota
+          </p>
+        </div>
+
+        <div class="flex flex-col items-center justify-center">
+          <div class="live-clock-badge px-4 py-1.5 rounded-full flex items-center gap-2">
+            <span class="pulse-dot"></span>
+            <i class="fa-regular fa-clock text-amber-400 text-xs"></i>
+            <span id="liveClock" class="text-xs font-mono font-extrabold tracking-wider text-white">00:00:00 WIB</span>
+            <span class="text-amber-400/60">•</span>
+            <span id="liveDate" class="text-[11px] font-semibold text-blue-200">Memuat tanggal...</span>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- MODAL FORM INPUT DATA (TAB SINGLE & TAB BATCH TABEL) -->
+  <div id="formModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div class="w-full max-w-7xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden relative my-auto flex flex-col max-h-[92vh]">
+      
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 px-5 py-3.5 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+        <div>
+          <h3 id="formModalTitle" class="text-sm sm:text-base font-extrabold flex items-center gap-2">
+            <i class="fa-solid fa-square-plus text-amber-400"></i>
+            <span>Form Input Data Usulan</span>
+          </h3>
+          <p class="text-[10px] text-blue-200">Pilih mode pengisian data yang Anda butuhkan melalui tab di sebelah kanan</p>
+        </div>
+
+        <!-- TAB BUTTONS -->
+        <div class="flex items-center bg-white/10 p-1 rounded-xl border border-white/10 shrink-0">
+          <button type="button" id="tabBtnSingle" onclick="switchFormTab('single')" class="form-tab-btn active-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-1.5">
+            <i class="fa-solid fa-file-pen"></i> Single Form
+          </button>
+          <button type="button" id="tabBtnBatch" onclick="switchFormTab('batch')" class="form-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-1.5">
+            <i class="fa-solid fa-table-list"></i> Batch Form (Tabel)
+          </button>
+          <button type="button" onclick="closeFormModal()" class="ml-2 w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- CONTAINER BODY TAB SINGLE -->
+      <div id="tabContentSingle" class="p-4 sm:p-5 overflow-y-auto space-y-3 flex-1">
+        <form onsubmit="handleFormSubmit(event)" class="space-y-3">
+          <input type="hidden" id="formRowIndex" value="">
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="form-label-compact">NIP Pegawai *</label>
+              <input type="text" id="formNip" inputmode="numeric" maxlength="18" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required placeholder="19911003..." class="form-input-compact font-mono">
+            </div>
+            <div>
+              <label class="form-label-compact">Nama Pegawai (Gelar) *</label>
+              <input type="text" id="formNama" required placeholder="Aulia Rahman, S.Kom" class="form-input-compact">
+            </div>
+            <div>
+              <label class="form-label-compact">Unit Kerja / OPD *</label>
+              <input type="text" id="formUnit" list="dataUnitKerja" required placeholder="Ketik / pilih OPD..." class="form-input-compact max-w-full">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="form-label-compact">Jenis Jabatan *</label>
+              <select id="formJabatan" required class="form-input-compact">
+                <option value="" disabled selected>Pilih Jabatan</option>
+                <option value="Fungsional Tertentu">Fungsional Tertentu</option>
+                <option value="Fungsional Umum">Fungsional Umum</option>
+                <option value="Struktural">Struktural</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label-compact">Jenis KP *</label>
+              <select id="formJenisKp" required class="form-input-compact">
+                <option value="" disabled selected>Pilih Jenis KP</option>
+                <option value="Reguler">Reguler</option>
+                <option value="Fungsional">Fungsional</option>
+                <option value="Struktural">Struktural</option>
+                <option value="Pilihan">Pilihan</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label-compact">Golongan Lama *</label>
+              <select id="formGolLama" required class="form-input-compact font-mono">
+                <option value="" disabled selected>Pilih Gol. Lama</option>
+                <option value="I/a">I/a - Juru Muda</option>
+                <option value="I/b">I/b - Juru Muda Tk. I</option>
+                <option value="I/c">I/c - Juru</option>
+                <option value="I/d">I/d - Juru Tk. I</option>
+                <option value="II/a">II/a - Pengatur Muda</option>
+                <option value="II/b">II/b - Pengatur Muda Tk. I</option>
+                <option value="II/c">II/c - Pengatur</option>
+                <option value="II/d">II/d - Pengatur Tk. I</option>
+                <option value="III/a">III/a - Penata Muda</option>
+                <option value="III/b">III/b - Penata Muda Tk. I</option>
+                <option value="III/c">III/c - Penata</option>
+                <option value="III/d">III/d - Penata Tk. I</option>
+                <option value="IV/a">IV/a - Pembina</option>
+                <option value="IV/b">IV/b - Pembina Tk. I</option>
+                <option value="IV/c">IV/c - Pembina Utama Muda</option>
+                <option value="IV/d">IV/d - Pembina Utama Madya</option>
+                <option value="IV/e">IV/e - Pembina Utama</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label-compact">Golongan Baru *</label>
+              <select id="formGolBaru" required class="form-input-compact font-mono">
+                <option value="" disabled selected>Pilih Gol. Baru</option>
+                <option value="I/a">I/a - Juru Muda</option>
+                <option value="I/b">I/b - Juru Muda Tk. I</option>
+                <option value="I/c">I/c - Juru</option>
+                <option value="I/d">I/d - Juru Tk. I</option>
+                <option value="II/a">II/a - Pengatur Muda</option>
+                <option value="II/b">II/b - Pengatur Muda Tk. I</option>
+                <option value="II/c">II/c - Pengatur</option>
+                <option value="II/d">II/d - Pengatur Tk. I</option>
+                <option value="III/a">III/a - Penata Muda</option>
+                <option value="III/b">III/b - Penata Muda Tk. I</option>
+                <option value="III/c">III/c - Penata</option>
+                <option value="III/d">III/d - Penata Tk. I</option>
+                <option value="IV/a">IV/a - Pembina</option>
+                <option value="IV/b">IV/b - Pembina Tk. I</option>
+                <option value="IV/c">IV/c - Pembina Utama Muda</option>
+                <option value="IV/d">IV/d - Pembina Utama Madya</option>
+                <option value="IV/e">IV/e - Pembina Utama</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="form-label-compact">Periode KP *</label>
+              <input type="month" id="formPeriodeKp" required class="form-input-compact">
+            </div>
+            <div>
+              <label class="form-label-compact">Tanggal Usul Masuk *</label>
+              <input type="date" id="formTanggalUsul" required class="form-input-compact">
+            </div>
+            <div>
+              <label class="form-label-compact">Tahapan Usulan *</label>
+              <select id="formTahapanUsulan" required class="form-input-compact">
+                <option value="" disabled selected>Pilih Tahapan Usulan</option>
+                <option value="1. Verifikasi Instansi">1. Verifikasi Instansi</option>
+                <option value="2. Verifikasi BKN">2. Verifikasi BKN</option>
+                <option value="3. Selesai">3. Selesai</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label-compact">Status Akhir *</label>
+              <select id="formStatusAkhir" required class="form-input-compact">
+                <option value="" disabled selected>Pilih Status Akhir</option>
+                <option value="Memenuhi Syarat (MS)">Memenuhi Syarat (MS)</option>
+                <option value="Berkas Tidak Sesuai (BTS)">Berkas Tidak Sesuai (BTS)</option>
+                <option value="Tidak Memenuhi Syarat (TMS)">Tidak Memenuhi Syarat (TMS)</option>
+                <option value="Pertek BKN">Pertek BKN</option>
+                <option value="Proses Verifikasi">Proses Verifikasi</option>
+                <option value="SK Ditetapkan">SK Ditetapkan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="form-label-compact">Verifikator *</label>
+              <select id="formVerifikator" required class="form-input-compact">
+                <option value="" disabled selected>Pilih Verifikator</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="form-label-compact">Catatan TMS/BTS</label>
+              <input type="text" id="formCatatan" placeholder="Isi '-' jika tidak ada" class="form-input-compact">
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-200 flex items-center justify-end gap-2">
+            <button type="button" onclick="closeFormModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition">Batal</button>
+            <button type="submit" id="btnSubmitForm" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg shadow-md transition flex items-center gap-1.5">
+              <i class="fa-solid fa-floppy-disk text-xs"></i> <span id="btnSubmitText">Simpan Data</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- CONTAINER BODY TAB BATCH (MODE TABEL INTERAKTIF PENULISAN UTUH) -->
+      <div id="tabContentBatch" class="hidden p-3 sm:p-4 bg-slate-100 overflow-y-auto flex-1 flex flex-col space-y-3">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm gap-2 shrink-0">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-table-columns text-emerald-600 text-xs"></i>
+            <span class="text-[11px] font-bold text-slate-700">Periksa dan edit langsung data usulan pada tabel di bawah sebelum disimpan.</span>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button type="button" onclick="downloadExcelTemplateWithDropdowns()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold flex items-center gap-1.5 transition" title="Unduh Template Excel">
+              <i class="fa-solid fa-download text-xs"></i> Unduh Template Excel
+            </button>
+            
+            <label class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow cursor-pointer transition active:scale-95" title="Unggah Berkas Excel">
+              <i class="fa-solid fa-file-import text-xs"></i> Upload Excel
+              <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="handleExcelImport(event)" class="hidden">
+            </label>
+
+            <button type="button" onclick="addBatchRowTable()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-plus text-xs"></i> Tambah Baris
+            </button>
+          </div>
+        </div>
+
+        <!-- TABEL INTERAKTIF BATCH (DENGAN MIN-WIDTH SETIAP KOLOM AGAR SELURUH TEKS/PILIHAN KELIHATAN) -->
+        <div class="table-scroll overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm flex-1 max-h-[500px]">
+          <table class="w-full custom-table min-w-[2100px]">
+            <thead>
+              <tr>
+                <th class="text-center min-w-[45px]">No</th>
+                <th class="text-left min-w-[190px]">NIP *</th>
+                <th class="text-left min-w-[250px]">Nama Pegawai *</th>
+                <th class="text-left min-w-[280px]">Unit Kerja / OPD *</th>
+                <th class="text-left min-w-[170px]">Jenis Jabatan *</th>
+                <th class="text-left min-w-[140px]">Jenis KP *</th>
+                <th class="text-left min-w-[110px]">Gol. Lama *</th>
+                <th class="text-left min-w-[110px]">Gol. Baru *</th>
+                <th class="text-left min-w-[145px]">Periode KP *</th>
+                <th class="text-left min-w-[150px]">Tgl Usul Masuk *</th>
+                <th class="text-left min-w-[190px]">Tahapan Usulan *</th>
+                <th class="text-left min-w-[220px]">Status Akhir *</th>
+                <th class="text-left min-w-[180px]">Verifikator *</th>
+                <th class="text-left min-w-[230px]">Catatan TMS/BTS</th>
+                <th class="text-center min-w-[65px]">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="batchTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
+          </table>
+        </div>
+
+        <div class="bg-white border-t border-slate-200 -mx-3 -mb-3 sm:-mx-4 sm:-mb-4 px-4 py-3 flex items-center justify-between shrink-0 rounded-b-2xl mt-auto">
+          <span id="batchRowCount" class="text-[11px] font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">0 Data Usulan</span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="closeFormModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition">Batal</button>
+            <button type="button" onclick="saveBatchData()" id="btnSaveBatch" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-md transition flex items-center gap-1.5 active:scale-95">
+              <i class="fa-solid fa-floppy-disk text-xs"></i> Simpan Semua Batch
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- POPUP MODAL AUDIT LOG -->
+  <div id="auditLogModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto transition-all">
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border-t-4 border-amber-400 border-x border-b border-slate-200/80 relative my-auto overflow-hidden">
+      
+      <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-blue-900 text-white px-5 py-4 flex items-center justify-between border-b border-white/10">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-clock-rotate-left text-amber-400 text-base"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-black tracking-tight text-white">Audit Log / Riwayat Aktivitas</h3>
+            <p class="text-[10px] sm:text-xs text-blue-200">Catatan riwayat aksi tambah, edit, dan hapus data usulan oleh Verifikator</p>
+          </div>
+        </div>
+        <button onclick="closeAuditLogModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 bg-slate-50 space-y-4">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="relative w-full sm:w-72">
+            <input type="text" id="searchAuditInput" onkeyup="renderAuditLogTable()" placeholder="Cari NIP, Nama, Verifikator..." class="w-full bg-slate-50 border border-slate-200 text-xs rounded-xl p-2.5 pl-9 focus:ring-2 focus:ring-amber-500 focus:bg-white transition">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+          </div>
+          <button onclick="loadAuditLogData()" class="w-full sm:w-auto px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-sm flex items-center justify-center gap-2 transition active:scale-95">
+            <i class="fa-solid fa-rotate text-amber-400"></i> Refresh Log
+          </button>
+        </div>
+
+        <div class="table-scroll overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm max-h-[420px]">
+          <table class="w-full custom-table min-w-[700px]">
+            <thead>
+              <tr>
+                <th class="text-left rounded-tl-xl whitespace-nowrap">Waktu (WIB)</th>
+                <th class="text-left whitespace-nowrap">Aksi</th>
+                <th class="text-left whitespace-nowrap">Verifikator</th>
+                <th class="text-left whitespace-nowrap">Target Pegawai / NIP</th>
+                <th class="text-left min-w-[250px] rounded-tr-xl">Rincian Perubahan / Keterangan</th>
+              </tr>
+            </thead>
+            <tbody id="auditLogTableBody" class="divide-y divide-slate-100 bg-white">
+              <tr>
+                <td colspan="5" class="text-center py-8 text-slate-400 font-medium text-xs">Memuat data riwayat...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="bg-white border-t border-slate-200 px-5 py-3 flex items-center justify-between">
+        <span id="auditLogCount" class="text-[11px] font-semibold text-slate-500">Total 0 catatan aktivitas</span>
+        <button onclick="closeAuditLogModal()" class="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- POPUP WARNING NIP DUPLIKAT -->
+  <div id="duplicateModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="glass-card w-full max-w-md p-6 bg-white shadow-2xl relative my-auto border-t-8 border-t-rose-600">
+      <button onclick="closeDuplicateModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <div class="text-center">
+        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3 class="text-lg font-extrabold text-slate-900 mb-1">Penyimpanan Ditolak!</h3>
+        <p class="text-xs font-semibold uppercase tracking-wider text-rose-600 mb-3">NIP Terdeteksi Duplikat</p>
+        
+        <div id="duplicateModalMessage" class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-800 text-left font-medium leading-relaxed mb-5">
+          Data tidak dapat disimpan karena NIP tersebut sudah terdaftar di sistem.
+        </div>
+
+        <button onclick="closeDuplicateModal()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs py-3 rounded-lg shadow-md active:scale-95 transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate-left"></i> Periksa NIP Kembali
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP MODAL LOGIN -->
+  <div id="loginModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto transition-all">
+    <div class="w-full max-w-sm sm:max-w-md bg-white rounded-3xl shadow-2xl border-t-4 border-amber-400 border-x border-b border-slate-200/80 relative my-auto overflow-hidden">
+      
+      <div class="absolute top-0 inset-x-0 h-28 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-900 z-0"></div>
+      
+      <button onclick="closeLoginModal()" class="absolute top-3 right-3 z-20 text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full flex items-center justify-center transition active:scale-95">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+
+      <div class="relative z-10 px-6 pt-6 pb-6">
+        <div class="text-center mb-6">
+          <div class="inline-flex p-2 bg-white rounded-2xl shadow-xl border border-amber-400/40 mb-3 transform hover:scale-105 transition">
+            <img src="https://i.ibb.co.com/JWP8MDbj/ChatGPT-Image-17-Agu-2026-11-35-22.png" alt="Logo LANTIK-PNS" class="h-14 sm:h-16 w-auto object-contain">
+          </div>
+          <h3 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">Otorisasi Verifikator</h3>
+          <p class="text-[11px] font-medium text-slate-500 mt-0.5">LANTIK-PNS • Kab. Lima Puluh Kota</p>
+        </div>
+
+        <div id="loginAlert" class="hidden mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-triangle-exclamation text-rose-500 text-sm shrink-0"></i>
+          <span id="loginAlertText">Username atau Password salah!</span>
+        </div>
+
+        <form onsubmit="handleModalLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Username</label>
+            <div class="relative flex items-center">
+              <input type="text" id="loginUser" required placeholder="Masukkan username" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs font-medium rounded-xl pl-10 pr-3 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition">
+              <i class="fa-solid fa-user-gear absolute left-3.5 text-slate-400 text-xs pointer-events-none"></i>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+            <div class="relative flex items-center">
+              <input type="password" id="loginPass" required placeholder="Masukkan password" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs font-medium rounded-xl pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition">
+              <i class="fa-solid fa-key absolute left-3.5 text-slate-400 text-xs pointer-events-none"></i>
+              <button type="button" onclick="togglePassword()" class="absolute right-2.5 text-slate-400 hover:text-amber-600 p-1.5 flex items-center justify-center rounded-lg transition">
+                <i id="eyeIcon" class="fa-solid fa-eye text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="btnLogin" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs py-3.5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 active:scale-95 transition">
+            <span>Verifikasi & Masuk</span>
+            <i class="fa-solid fa-right-to-bracket text-xs"></i>
+          </button>
+        </form>
+
+        <div class="mt-5 pt-3 border-t border-slate-100 text-center">
+          <p class="text-[10px] text-slate-400 flex items-center justify-center gap-1">
+            <i class="fa-solid fa-shield-halved text-amber-500"></i> Sesi terenkripsi & terproteksi sistem
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PETUNJUK PENGGUNAAN LENGKAP -->
+  <div id="guideModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div class="w-full max-w-5xl max-h-[95vh] overflow-hidden bg-white rounded-2xl shadow-2xl relative my-auto border border-blue-100 flex flex-col">
+
+      <div class="sticky top-0 z-20 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-900 text-white px-4 sm:px-6 py-4 border-b-2 border-amber-400 shrink-0">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shadow-inner shrink-0">
+              <i class="fa-solid fa-book-open-reader text-amber-300 text-xl"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30 font-bold tracking-wider uppercase">Panduan Resmi</span>
+              </div>
+              <h3 class="text-lg sm:text-xl font-black tracking-tight mt-1">Petunjuk Penggunaan LANTIK-PNS</h3>
+              <p class="text-[10px] sm:text-xs text-blue-200 mt-0.5">Panduan praktis untuk Pengguna Umum dan Verifikator Sistem</p>
+            </div>
+          </div>
+          <button onclick="closeGuideModal()" class="shrink-0 w-9 h-9 rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition flex items-center justify-center" title="Tutup">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="guideContent" class="overflow-y-auto max-h-[calc(95vh-150px)] bg-slate-50 p-3 sm:p-5 space-y-4 flex-1">
+
+        <!-- HEADER BANNER PANDUAN -->
+        <div class="rounded-2xl bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 text-white p-4 sm:p-5 shadow-lg relative overflow-hidden">
+          <div class="relative z-10">
+            <div class="flex items-center gap-2 text-amber-300 text-[10px] font-bold uppercase tracking-[0.18em]">
+              <i class="fa-solid fa-compass"></i> Alur Kerja Sistem
+            </div>
+            <h4 class="text-lg sm:text-xl font-black mt-1">Panduan Penggunaan Terpadu Dashboard LANTIK-PNS</h4>
+            <p class="text-xs text-blue-100 mt-1 max-w-3xl leading-relaxed">
+              LANTIK-PNS mempermudah pemantauan kenaikan pangkat secara terbuka untuk Pegawai/Masyarakat, serta menyediakan portal verifikasi khusus untuk Verifikator BKPSDM Kabupaten Lima Puluh Kota.
+            </p>
+          </div>
+        </div>
+
+        <!-- FITUR UTAMA DALAM APLIKASI -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          
+          <!-- SEKSI PENGGUNA UMUM -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
+              <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-black">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wide">1. Untuk Pengguna Umum / Pegawai</h5>
+            </div>
+            
+            <ul class="space-y-2 text-xs text-slate-600">
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-magnifying-glass text-blue-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Pencarian Cepat:</strong> Masukkan 18 digit NIP atau Nama pada kotak pencarian di atas tabel utama untuk menemukan status usulan Anda secara presisi.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-filter text-amber-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Penyaringan Data:</strong> Gunakan panel filter di bagian atas untuk menyaring usulan berdasarkan Periode KP, Unit Kerja (OPD), Status Akhir, Jenis KP, dan Verifikator.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-file-excel text-emerald-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Export Data Excel:</strong> Klik tombol <em>Export Excel</em> pada bilah navigasi untuk mengunduh rekapitulasi data usulan yang terfilter.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-chart-pie text-indigo-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Monitoring Visual & KPI:</strong> Pantau ringkasan statistik usulan melalui kartu KPI dan grafik interaktif (Status per OPD, Tahapan, Jenis KP, dan Beban Verifikator).</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- SEKSI VERIFIKATOR -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
+              <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-black">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
+              <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wide">2. Untuk Verifikator (BKPSDM)</h5>
+            </div>
+            
+            <ul class="space-y-2 text-xs text-slate-600">
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-right-to-bracket text-amber-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Otorisasi / Login:</strong> Klik tombol <em>Login Verifikator</em> dan masukkan kredensial resmi untuk membuka fitur edit, tambah, dan audit log.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-file-pen text-blue-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Input Single Form:</strong> Tambahkan usulan satu per satu dengan melengkapi seluruh atribut wajib pegawai secara mendetail.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-table-list text-emerald-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Batch Form (Tabel Interaktif):</strong> Kelola banyak usulan sekaligus dalam bentuk grid/tabel. Anda dapat mengedit, menambah baris, atau mengimpor data dari Excel.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-cyan-500 mt-0.5 text-[11px]"></i>
+                <span><strong>Audit Log Aktivitas:</strong> Setiap tindakan tambah, ubah, atau hapus data terekam secara otomatis dalam menu <em>Audit Log</em> lengkap dengan timestamp WIB.</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- PETUNJUK FORMAT EXCEL & VALIDASI -->
+        <div class="bg-slate-900 text-white p-4 rounded-xl border border-slate-800 space-y-2.5">
+          <h5 class="text-xs font-extrabold text-amber-400 flex items-center gap-2 uppercase tracking-wide">
+            <i class="fa-solid fa-file-excel"></i> Ketentuan Penggunaan Import & Template Excel
+          </h5>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] text-slate-300">
+            <div class="p-2.5 bg-white/5 rounded-lg border border-white/10">
+              <strong class="text-white block mb-1">Unduh Template Baku:</strong>
+              Gunakan selalu tombol <em>Unduh Template Excel</em> di dalam Batch Form untuk memperoleh berkas berformat standar.
+            </div>
+            <div class="p-2.5 bg-white/5 rounded-lg border border-white/10">
+              <strong class="text-white block mb-1">Format Bulan (01 - 12):</strong>
+              Kolom PERIODE KP pada template diketik berupa 2 digit bulan (misal `08` atau `10`) atau dipilih langsung melalui dropdown agar tidak terkonversi otomatis.
+            </div>
+            <div class="p-2.5 bg-white/5 rounded-lg border border-white/10">
+              <strong class="text-white block mb-1">Pencegahan Duplikasi:</strong>
+              Sistem akan memverifikasi NIP secara otomatis. Apabila NIP sudah ada di database, sistem akan menampilkan peringatan dan menolak penyimpanan.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sticky bottom-0 z-20 bg-white border-t border-slate-200 px-4 sm:px-5 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
+        <div class="text-[9px] sm:text-[10px] text-slate-500 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-info text-blue-500"></i>
+          <span>Panduan ini dapat diunduh sebagai berkas PDF untuk keperluan arsip.</span>
+        </div>
+        <div class="flex items-center justify-end gap-2">
+          <button onclick="downloadGuidePDF()" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-700 hover:to-red-800 shadow-md flex items-center justify-center gap-2 active:scale-95 transition">
+            <i class="fa-solid fa-file-pdf"></i> Download Panduan PDF
+          </button>
+          <button onclick="closeGuideModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <datalist id="dataUnitKerja"></datalist>
+
+  <script>
+    let rawData = [];
+    let filteredData = [];
+    let isAuthenticated = false;
+    let chartObjUnit, chartObjBerkas, chartObjJenis, chartObjVerifikator;
+    let globalVerifikatorList = [];
+    let globalOpdList = [];
+    let auditLogData = [];
+
+    let currentPage = 1;
+    const rowsPerPage = 10;
+
+    window.onload = function() {
+      loadDashboardData();
+      loadVerifikatorList();
+      loadOpdList();
+      initLiveClock();
+
+      document.addEventListener('keydown', function(e) { 
+        if (e.key === 'Escape') { 
+          closeGuideModal(); 
+          closeLoginModal(); 
+          closeDuplicateModal(); 
+          closeFormModal();
+          closeAuditLogModal();
+        } 
+      });
+    };
+
+    function setActivePill(clickedElem) {
+      document.querySelectorAll('.segmented-control-track .pill-btn').forEach(btn => {
+        btn.classList.remove('active-pill');
+      });
+      clickedElem.classList.add('active-pill');
+    }
+
+    function initLiveClock() {
+      function updateClock() {
+        const now = new Date();
+        const clockEl = document.getElementById('liveClock');
+        const dateEl = document.getElementById('liveDate');
+        if (clockEl) clockEl.textContent = now.toLocaleTimeString('id-ID') + ' WIB';
+        if (dateEl) {
+          const options = { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' };
+          dateEl.textContent = now.toLocaleDateString('id-ID', options);
+        }
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    /* DOWNLOAD TEMPLATE EXCEL DENGAN DROPDOWN BULAN (01-12) & FORMAT TEXT @ */
+    async function downloadExcelTemplateWithDropdowns() {
+      if (typeof ExcelJS === 'undefined') {
+        alert("Library ExcelJS sedang dimuat, silakan coba beberapa detik lagi.");
+        return;
+      }
+
+      const workbook = new ExcelJS.Workbook();
+
+      const opdOptions = globalOpdList.length > 0 ? globalOpdList : ["Dinas Pendidikan dan Kebudayaan", "BKPSDM", "Sekretariat Daerah"];
+      const golOptions = ["I/a", "I/b", "I/c", "I/d", "II/a", "II/b", "II/c", "II/d", "III/a", "III/b", "III/c", "III/d", "IV/a", "IV/b", "IV/c", "IV/d", "IV/e"];
+      const jabatanOptions = ["Fungsional Tertentu", "Fungsional Umum", "Struktural"];
+      const jenisKpOptions = ["Reguler", "Fungsional", "Struktural", "Pilihan"];
+      const tahapanOptions = ["1. Verifikasi Instansi", "2. Verifikasi BKN", "3. Selesai"];
+      const statusOptions = ["Memenuhi Syarat (MS)", "Berkas Tidak Sesuai (BTS)", "Tidak Memenuhi Syarat (TMS)", "Pertek BKN", "Proses Verifikasi", "SK Ditetapkan"];
+      const verifOptions = globalVerifikatorList.length > 0 ? globalVerifikatorList : ["Friska Gustina", "Meci Anggraini"];
+
+      const refSheet = workbook.addWorksheet('Referensi_Data');
+      
+      const maxRows = Math.max(
+        opdOptions.length, jabatanOptions.length, jenisKpOptions.length,
+        golOptions.length, tahapanOptions.length, statusOptions.length, verifOptions.length
+      );
+
+      refSheet.addRow(['UNIT_KERJA', 'JENIS_JABATAN', 'JENIS_KP', 'GOLONGAN', 'TAHAPAN', 'STATUS_AKHIR', 'VERIFIKATOR']);
+
+      for (let i = 0; i < maxRows; i++) {
+        refSheet.addRow([
+          opdOptions[i] || '', jabatanOptions[i] || '', jenisKpOptions[i] || '',
+          golOptions[i] || '', tahapanOptions[i] || '', statusOptions[i] || '', verifOptions[i] || ''
+        ]);
+      }
+
+      const mainSheet = workbook.addWorksheet('Template_Usulan');
+
+      mainSheet.columns = [
+        { header: 'NIP', key: 'nip', width: 22 },
+        { header: 'NAMA PEGAWAI', key: 'nama', width: 28 },
+        { header: 'UNIT KERJA', key: 'unit', width: 35 },
+        { header: 'JENIS JABATAN', key: 'jabatan', width: 22 },
+        { header: 'JENIS KP', key: 'jenis_kp', width: 18 },
+        { header: 'GOLONGAN LAMA', key: 'gol_lama', width: 18 },
+        { header: 'GOLONGAN BARU', key: 'gol_baru', width: 18 },
+        { header: 'PERIODE KP', key: 'periode', width: 16 },
+        { header: 'TANGGAL USUL MASUK', key: 'tgl_usul', width: 22 },
+        { header: 'TAHAPAN USULAN', key: 'tahapan', width: 24 },
+        { header: 'STATUS AKHIR', key: 'status', width: 26 },
+        { header: 'VERIFIKATOR', key: 'verifikator', width: 22 },
+        { header: 'CATATAN TMS/BTS', key: 'catatan', width: 30 }
+      ];
+
+      mainSheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
+      mainSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '0F172A' } };
+
+      const sampleRow = mainSheet.addRow({
+        nip: '199110032026011001',
+        nama: 'Aulia Rahman, S.Kom',
+        unit: opdOptions[0] || 'Dinas Pendidikan dan Kebudayaan',
+        jabatan: 'Fungsional Tertentu',
+        jenis_kp: 'Fungsional',
+        gol_lama: 'III/a',
+        gol_baru: 'III/b',
+        periode: '10', 
+        tgl_usul: new Date(2026, 7, 15),
+        tahapan: '1. Verifikasi Instansi',
+        status: 'Memenuhi Syarat (MS)',
+        verifikator: verifOptions[0] || 'Friska Gustina',
+        catatan: '-'
+      });
+
+      for (let rowIdx = 2; rowIdx <= 100; rowIdx++) {
+        const cellPeriode = mainSheet.getCell(`H${rowIdx}`);
+        cellPeriode.numFmt = '@';
+        cellPeriode.dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: ['"01,02,03,04,05,06,07,08,09,10,11,12"']
+        };
+
+        const cellTgl = mainSheet.getCell(`I${rowIdx}`);
+        cellTgl.numFmt = 'yyyy-mm-dd';
+
+        mainSheet.getCell(`C${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$A$2:$A$${opdOptions.length + 1}`] };
+        mainSheet.getCell(`D${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$B$2:$B$${jabatanOptions.length + 1}`] };
+        mainSheet.getCell(`E${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$C$2:$C$${jenisKpOptions.length + 1}`] };
+        mainSheet.getCell(`F${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$D$2:$D$${golOptions.length + 1}`] };
+        mainSheet.getCell(`G${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$D$2:$D$${golOptions.length + 1}`] };
+        mainSheet.getCell(`J${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$E$2:$E$${tahapanOptions.length + 1}`] };
+        mainSheet.getCell(`K${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$F$2:$F$${statusOptions.length + 1}`] };
+        mainSheet.getCell(`L${rowIdx}`).dataValidation = { type: 'list', allowBlank: true, formulae: [`Referensi_Data!$G$2:$G$${verifOptions.length + 1}`] };
+      }
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'Template_Batch_Usulan_LANTIK_PNS.xlsx';
+      link.click();
+      URL.revokeObjectURL(link.href);
+
+      showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Template Excel berhasil diunduh dengan dropdown periode bulan (01–12).');
+    }
+
+    /* FUNGSI IMPOR EXCEL FLEKSIBEL KE TABEL BATCH */
+    function handleExcelImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+          
+          let targetSheetName = workbook.SheetNames.find(name => name.trim() === 'Template_Usulan');
+          if (!targetSheetName) {
+            targetSheetName = workbook.SheetNames[0];
+          }
+          
+          const worksheet = workbook.Sheets[targetSheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+          if (jsonData.length === 0) {
+            alert("Berkas Excel tidak memiliki data!");
+            return;
+          }
+
+          const getColumnValue = (row, possibleKeys) => {
+            const rowKeys = Object.keys(row);
+            for (let key of rowKeys) {
+              const cleanKey = key.toString().trim().toLowerCase();
+              for (let possible of possibleKeys) {
+                if (cleanKey === possible.toLowerCase()) {
+                  let val = row[key];
+                  if (val instanceof Date) {
+                    const y = val.getFullYear();
+                    const m = String(val.getMonth() + 1).padStart(2, '0');
+                    const d = String(val.getDate()).padStart(2, '0');
+                    return `${y}-${m}-${d}`;
+                  }
+                  return val ? val.toString().trim() : '';
+                }
+              }
+            }
+            return '';
+          };
+
+          const validRows = jsonData.filter(row => {
+            const nip = getColumnValue(row, ['NIP', 'NIP PEGAWAI', 'NIP_PEGAWAI', 'NO NIP']);
+            const nama = getColumnValue(row, ['NAMA PEGAWAI', 'NAMA', 'NAMA_PEGAWAI', 'NAMA LENGKAP']);
+            return nip !== '' || nama !== '';
+          });
+
+          if (validRows.length === 0) {
+            alert("Tidak ada data usulan pegawai yang valid untuk diimpor!\n\nPastikan header kolom di Excel memiliki nama 'NIP' dan 'NAMA PEGAWAI'.");
+            return;
+          }
+
+          const tbody = document.getElementById('batchTableBody');
+          tbody.innerHTML = ''; 
+
+          validRows.forEach((row) => {
+            let periodeRaw = getColumnValue(row, ['PERIODE KP', 'PERIODE']);
+            if (periodeRaw && (periodeRaw.length === 1 || periodeRaw.length === 2) && !isNaN(periodeRaw)) {
+              const currentYear = new Date().getFullYear();
+              periodeRaw = `${currentYear}-${periodeRaw.padStart(2, '0')}`;
+            }
+
+            const parsedRow = {
+              'NIP': getColumnValue(row, ['NIP', 'NIP PEGAWAI']),
+              'NAMA PEGAWAI': getColumnValue(row, ['NAMA PEGAWAI', 'NAMA']),
+              'UNIT KERJA': getColumnValue(row, ['UNIT KERJA', 'UNIT_KERJA', 'OPD']),
+              'JENIS JABATAN': getColumnValue(row, ['JENIS JABATAN', 'JENIS_JABATAN']),
+              'JENIS KP': getColumnValue(row, ['JENIS KP', 'JENIS_KP']),
+              'GOLONGAN LAMA': getColumnValue(row, ['GOLONGAN LAMA', 'GOL_LAMA']),
+              'GOLONGAN BARU': getColumnValue(row, ['GOLONGAN BARU', 'GOL_BARU']),
+              'PERIODE KP': periodeRaw,
+              'TANGGAL USUL MASUK': getColumnValue(row, ['TANGGAL USUL MASUK', 'TGL_USUL', 'TANGGAL USUL']),
+              'TAHAPAN USULAN': getColumnValue(row, ['TAHAPAN USULAN', 'TAHAPAN']) || '1. Verifikasi Instansi',
+              'STATUS AKHIR': getColumnValue(row, ['STATUS AKHIR', 'STATUS']) || 'Memenuhi Syarat (MS)',
+              'VERIFIKATOR': getColumnValue(row, ['VERIFIKATOR']),
+              'CATATAN TMS/BTS': getColumnValue(row, ['CATATAN TMS/BTS', 'CATATAN', 'CATATAN TMS/BTL']) || '-'
+            };
+            addBatchRowTable(parsedRow);
+          });
+
+          showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', `Berhasil mengimpor ${validRows.length} data usulan dari file Excel.`);
+        } catch (err) {
+          console.error(err);
+          alert("Gagal membaca file Excel! Pastikan format file sesuai.");
+        }
+      };
+      reader.readAsArrayBuffer(file);
+      event.target.value = '';
+    }
+
+    function togglePublicGuideContent() {
+      const body = document.getElementById('guideContentBody');
+      const icon = document.getElementById('iconToggleGuide');
+
+      if (!body) return;
+
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-up');
+      } else {
+        body.classList.add('hidden');
+        icon.classList.remove('fa-chevron-up');
+        icon.classList.add('fa-chevron-down');
+      }
+    }
+
+    function toggleDashboardCharts() {
+      const visualArea = document.getElementById('dashboardVisualArea');
+      const btnText = document.getElementById('btnToggleDashboardText');
+      const btnIcon = document.querySelector('#btnToggleDashboard i');
+
+      if (visualArea.classList.contains('hidden')) {
+        visualArea.classList.remove('hidden');
+        btnText.textContent = 'Sembunyikan Grafik & KPI';
+        btnIcon.className = 'fa-solid fa-eye-slash text-slate-500';
+      } else {
+        visualArea.classList.add('hidden');
+        btnText.textContent = 'Tampilkan Grafik & KPI';
+        btnIcon.className = 'fa-solid fa-eye text-blue-600';
+      }
+    }
+
+    function openFormModal(mode = 'single', forceResetBatch = false) {
+      if (!isAuthenticated) { openLoginModal(); return; }
+      document.getElementById('formModal').classList.remove('hidden');
+
+      if (forceResetBatch) {
+        resetBatchFormToEmpty();
+        resetFormToCreate();
+      }
+
+      switchFormTab(mode);
+    }
+
+    function closeFormModal() {
+      document.getElementById('formModal').classList.add('hidden');
+      resetFormToCreate();
+      resetBatchFormToEmpty();
+    }
+
+    function switchFormTab(targetTab) {
+      const btnSingle = document.getElementById('tabBtnSingle');
+      const btnBatch = document.getElementById('tabBtnBatch');
+      const contentSingle = document.getElementById('tabContentSingle');
+      const contentBatch = document.getElementById('tabContentBatch');
+
+      if (targetTab === 'single') {
+        btnSingle.classList.add('active-tab');
+        btnBatch.classList.remove('active-tab');
+        contentSingle.classList.remove('hidden');
+        contentBatch.classList.add('hidden');
+      } else {
+        btnBatch.classList.add('active-tab');
+        btnSingle.classList.remove('active-tab');
+        contentBatch.classList.remove('hidden');
+        contentSingle.classList.add('hidden');
+
+        const tbody = document.getElementById('batchTableBody');
+        if (tbody.children.length === 0) {
+          addBatchRowTable();
+        }
+      }
+    }
+
+    function resetBatchFormToEmpty() {
+      const tbody = document.getElementById('batchTableBody');
+      tbody.innerHTML = '';
+      addBatchRowTable();
+    }
+
+    function loadOpdList() {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(list) {
+          if (list && list.length > 0) {
+            globalOpdList = list;
+            populateOpdDatalist(list);
+          }
+        }).getOpdList();
+      } else {
+        globalOpdList = [
+          "Sekretariat Daerah", "Sekretariat DPRD", "Inspektorat Daerah", "Satuan Polisi Pamong Praja",
+          "RSUD Dr. Achmad Darwis Suliki", "Badan Kepegawaian dan Pengembangan SDM (BKPSDM)",
+          "Badan Perencanaan Penelitian dan Pengembangan (Bapelitbang)", "Badan Keuangan",
+          "Badan Penanggulangan Bencana Daerah (BPBD)", "Badan Kesatuan Bangsa dan Politik",
+          "Dinas Pendidikan dan Kebudayaan", "Dinas Kesehatan", "Dinas Pekerjaan Umum dan Penataan Ruang",
+          "Dinas Perumahan Rakyat, Kawasan Permukiman dan Lingkungan Hidup", "Dinas Sosial",
+          "Dinas Perindustrian dan Tenaga Kerja", "Dinas Tanaman Pangan, Hortikultura dan Perkebunan",
+          "Dinas Peternakan dan Kesehatan Hewan", "Dinas Perikanan", "Dinas Ketahanan Pangan",
+          "Dinas Pemberdayaan Masyarakat dan Desa/Nagari", "Dinas Perhubungan", "Dinas Komunikasi dan Informatika",
+          "Dinas Koperasi, Usaha Kecil dan Menengah", "Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu",
+          "Dinas Pariwisata, Pemuda dan Olahraga", "Dinas Perpustakaan dan Kearsipan", "Dinas Kependudukan dan Pencatatan Sipil",
+          "Dinas Perdagangan", "Kecamatan Akabiluru", "Kecamatan Bukik Barisan", "Kecamatan Guguak",
+          "Kecamatan Gunuang Omeh", "Kecamatan Harau", "Kecamatan Kapur IX", "Kecamatan Lareh Sago Halaban",
+          "Kecamatan Luak", "Kecamatan Mungka", "Kecamatan Pangkalan Koto Baru", "Kecamatan Payakumbuh",
+          "Kecamatan Situjuah Limo Nagari", "Kecamatan Suliki"
+        ];
+        populateOpdDatalist(globalOpdList);
+      }
+    }
+
+    function populateOpdDatalist(items) {
+      const datalist = document.getElementById('dataUnitKerja');
+      if (!datalist) return;
+      datalist.innerHTML = '';
+      
+      items.sort().forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item;
+        datalist.appendChild(opt);
+      });
+    }
+
+    /* MENAMBAHKAN BARIS BARU PADA TABEL BATCH (LEBAR KOMPONEN DIPASTIKAN UTUH TERLIHAT) */
+    function addBatchRowTable(data = null) {
+      const tbody = document.getElementById('batchTableBody');
+      const rowCount = tbody.children.length + 1;
+      const tr = document.createElement('tr');
+      tr.className = "batch-row-tr hover:bg-slate-50 transition border-b border-slate-100 text-[11px]";
+
+      if (data && data.rowIndex) tr.dataset.rowIndex = data.rowIndex;
+
+      let verifOptions = '<option value="" disabled selected>Pilih Verifikator</option>';
+      globalVerifikatorList.forEach(v => {
+        const selected = (data && data['VERIFIKATOR'] === v) ? 'selected' : '';
+        verifOptions += `<option value="${v}" ${selected}>${v}</option>`;
+      });
+
+      const today = new Date().toISOString().split('T')[0];
+      let tglVal = (data && data['TANGGAL USUL MASUK']) ? data['TANGGAL USUL MASUK'] : today;
+      if (tglVal && tglVal.includes('T')) tglVal = tglVal.split('T')[0];
+
+      const golLamaVal = (data && data['GOLONGAN LAMA']) || '';
+      const golBaruVal = (data && data['GOLONGAN BARU']) || '';
+      const jabatanVal = (data && data['JENIS JABATAN']) || '';
+      const jenisKpVal = (data && data['JENIS KP']) || '';
+      const tahapanVal = (data && data['TAHAPAN USULAN']) || '';
+      const statusVal = (data && data['STATUS AKHIR']) || '';
+
+      tr.innerHTML = `
+        <td class="text-center font-bold text-slate-500 row-num">${rowCount}</td>
+        <td>
+          <input type="text" inputmode="numeric" maxlength="18" oninput="this.value = this.value.replace(/[^0-9]/g, '')" value="${(data && data['NIP']) || ''}" placeholder="19911003..." class="b-nip batch-table-input font-mono">
+        </td>
+        <td>
+          <input type="text" value="${(data && data['NAMA PEGAWAI']) || ''}" placeholder="Aulia Rahman, S.Kom" class="b-nama batch-table-input">
+        </td>
+        <td>
+          <input type="text" value="${(data && data['UNIT KERJA']) || ''}" list="dataUnitKerja" placeholder="Ketik/Pilih OPD..." class="b-unit batch-table-input">
+        </td>
+        <td>
+          <select class="b-jabatan batch-table-input">
+            <option value="" disabled ${!jabatanVal ? 'selected' : ''}>Pilih Jabatan</option>
+            <option value="Fungsional Tertentu" ${jabatanVal === 'Fungsional Tertentu' ? 'selected' : ''}>Fungsional Tertentu</option>
+            <option value="Fungsional Umum" ${jabatanVal === 'Fungsional Umum' ? 'selected' : ''}>Fungsional Umum</option>
+            <option value="Struktural" ${jabatanVal === 'Struktural' ? 'selected' : ''}>Struktural</option>
+          </select>
+        </td>
+        <td>
+          <select class="b-jeniskp batch-table-input">
+            <option value="" disabled ${!jenisKpVal ? 'selected' : ''}>Pilih Jenis KP</option>
+            <option value="Reguler" ${jenisKpVal === 'Reguler' ? 'selected' : ''}>Reguler</option>
+            <option value="Fungsional" ${jenisKpVal === 'Fungsional' ? 'selected' : ''}>Fungsional</option>
+            <option value="Struktural" ${jenisKpVal === 'Struktural' ? 'selected' : ''}>Struktural</option>
+            <option value="Pilihan" ${jenisKpVal === 'Pilihan' ? 'selected' : ''}>Pilihan</option>
+          </select>
+        </td>
+        <td>
+          <select class="b-gollama batch-table-input font-mono">
+            <option value="" disabled ${!golLamaVal ? 'selected' : ''}>Gol. Lama</option>
+            <option value="I/a" ${golLamaVal === 'I/a' ? 'selected' : ''}>I/a</option>
+            <option value="I/b" ${golLamaVal === 'I/b' ? 'selected' : ''}>I/b</option>
+            <option value="I/c" ${golLamaVal === 'I/c' ? 'selected' : ''}>I/c</option>
+            <option value="I/d" ${golLamaVal === 'I/d' ? 'selected' : ''}>I/d</option>
+            <option value="II/a" ${golLamaVal === 'II/a' ? 'selected' : ''}>II/a</option>
+            <option value="II/b" ${golLamaVal === 'II/b' ? 'selected' : ''}>II/b</option>
+            <option value="II/c" ${golLamaVal === 'II/c' ? 'selected' : ''}>II/c</option>
+            <option value="II/d" ${golLamaVal === 'II/d' ? 'selected' : ''}>II/d</option>
+            <option value="III/a" ${golLamaVal === 'III/a' ? 'selected' : ''}>III/a</option>
+            <option value="III/b" ${golLamaVal === 'III/b' ? 'selected' : ''}>III/b</option>
+            <option value="III/c" ${golLamaVal === 'III/c' ? 'selected' : ''}>III/c</option>
+            <option value="III/d" ${golLamaVal === 'III/d' ? 'selected' : ''}>III/d</option>
+            <option value="IV/a" ${golLamaVal === 'IV/a' ? 'selected' : ''}>IV/a</option>
+            <option value="IV/b" ${golLamaVal === 'IV/b' ? 'selected' : ''}>IV/b</option>
+            <option value="IV/c" ${golLamaVal === 'IV/c' ? 'selected' : ''}>IV/c</option>
+            <option value="IV/d" ${golLamaVal === 'IV/d' ? 'selected' : ''}>IV/d</option>
+            <option value="IV/e" ${golLamaVal === 'IV/e' ? 'selected' : ''}>IV/e</option>
+          </select>
+        </td>
+        <td>
+          <select class="b-golbaru batch-table-input font-mono">
+            <option value="" disabled ${!golBaruVal ? 'selected' : ''}>Gol. Baru</option>
+            <option value="I/a" ${golBaruVal === 'I/a' ? 'selected' : ''}>I/a</option>
+            <option value="I/b" ${golBaruVal === 'I/b' ? 'selected' : ''}>I/b</option>
+            <option value="I/c" ${golBaruVal === 'I/c' ? 'selected' : ''}>I/c</option>
+            <option value="I/d" ${golBaruVal === 'I/d' ? 'selected' : ''}>I/d</option>
+            <option value="II/a" ${golBaruVal === 'II/a' ? 'selected' : ''}>II/a</option>
+            <option value="II/b" ${golBaruVal === 'II/b' ? 'selected' : ''}>II/b</option>
+            <option value="II/c" ${golBaruVal === 'II/c' ? 'selected' : ''}>II/c</option>
+            <option value="II/d" ${golBaruVal === 'II/d' ? 'selected' : ''}>II/d</option>
+            <option value="III/a" ${golBaruVal === 'III/a' ? 'selected' : ''}>III/a</option>
+            <option value="III/b" ${golBaruVal === 'III/b' ? 'selected' : ''}>III/b</option>
+            <option value="III/c" ${golBaruVal === 'III/c' ? 'selected' : ''}>III/c</option>
+            <option value="III/d" ${golBaruVal === 'III/d' ? 'selected' : ''}>III/d</option>
+            <option value="IV/a" ${golBaruVal === 'IV/a' ? 'selected' : ''}>IV/a</option>
+            <option value="IV/b" ${golBaruVal === 'IV/b' ? 'selected' : ''}>IV/b</option>
+            <option value="IV/c" ${golBaruVal === 'IV/c' ? 'selected' : ''}>IV/c</option>
+            <option value="IV/d" ${golBaruVal === 'IV/d' ? 'selected' : ''}>IV/d</option>
+            <option value="IV/e" ${golBaruVal === 'IV/e' ? 'selected' : ''}>IV/e</option>
+          </select>
+        </td>
+        <td>
+          <input type="month" value="${(data && data['PERIODE KP']) ? parsePeriodeSafe(data['PERIODE KP']) : ''}" class="b-periode batch-table-input">
+        </td>
+        <td>
+          <input type="date" value="${tglVal}" class="b-tgl batch-table-input">
+        </td>
+        <td>
+          <select class="b-tahapan batch-table-input">
+            <option value="" disabled ${!tahapanVal ? 'selected' : ''}>Pilih Tahapan</option>
+            <option value="1. Verifikasi Instansi" ${tahapanVal === '1. Verifikasi Instansi' ? 'selected' : ''}>1. Verifikasi Instansi</option>
+            <option value="2. Verifikasi BKN" ${tahapanVal === '2. Verifikasi BKN' ? 'selected' : ''}>2. Verifikasi BKN</option>
+            <option value="3. Selesai" ${tahapanVal === '3. Selesai' ? 'selected' : ''}>3. Selesai</option>
+          </select>
+        </td>
+        <td>
+          <select class="b-status batch-table-input">
+            <option value="" disabled ${!statusVal ? 'selected' : ''}>Pilih Status</option>
+            <option value="Memenuhi Syarat (MS)" ${statusVal === 'Memenuhi Syarat (MS)' ? 'selected' : ''}>Memenuhi Syarat (MS)</option>
+            <option value="Berkas Tidak Sesuai (BTS)" ${statusVal === 'Berkas Tidak Sesuai (BTS)' ? 'selected' : ''}>Berkas Tidak Sesuai (BTS)</option>
+            <option value="Tidak Memenuhi Syarat (TMS)" ${statusVal === 'Tidak Memenuhi Syarat (TMS)' ? 'selected' : ''}>Tidak Memenuhi Syarat (TMS)</option>
+            <option value="Pertek BKN" ${statusVal === 'Pertek BKN' ? 'selected' : ''}>Pertek BKN</option>
+            <option value="Proses Verifikasi" ${statusVal === 'Proses Verifikasi' ? 'selected' : ''}>Proses Verifikasi</option>
+            <option value="SK Ditetapkan" ${statusVal === 'SK Ditetapkan' ? 'selected' : ''}>SK Ditetapkan</option>
+          </select>
+        </td>
+        <td>
+          <select class="b-verif batch-table-input">${verifOptions}</select>
+        </td>
+        <td>
+          <input type="text" value="${(data && (data['CATATAN TMS/BTS'] || data['CATATAN TMS/BTL'])) || '-'}" placeholder="Catatan..." class="b-catatan batch-table-input">
+        </td>
+        <td class="text-center">
+          <button type="button" onclick="removeBatchRowTable(this)" class="p-1 px-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-xs font-bold transition" title="Hapus Baris Ini">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+      updateBatchRowNumbers();
+    }
+
+    function removeBatchRowTable(btn) {
+      const tbody = document.getElementById('batchTableBody');
+      if (tbody.children.length <= 1) {
+        alert("Minimal harus ada satu baris usulan!");
+        return;
+      }
+      btn.closest('tr').remove();
+      updateBatchRowNumbers();
+    }
+
+    function updateBatchRowNumbers() {
+      const rows = document.querySelectorAll('.batch-row-tr');
+      rows.forEach((row, index) => {
+        const numElem = row.querySelector('.row-num');
+        if (numElem) numElem.textContent = index + 1;
+      });
+      document.getElementById('batchRowCount').textContent = `${rows.length} Data Usulan`;
+    }
+
+    function saveBatchData() {
+      if (!isAuthenticated) { openLoginModal(); return; }
+
+      const rows = document.querySelectorAll('.batch-row-tr');
+      const batchList = [];
+      let isValid = true;
+
+      rows.forEach((row) => {
+        const nip = row.querySelector('.b-nip').value.trim();
+        const nama = row.querySelector('.b-nama').value.trim();
+        const unit = row.querySelector('.b-unit').value.trim();
+        const jabatan = row.querySelector('.b-jabatan').value;
+        const jenisKp = row.querySelector('.b-jeniskp').value;
+        const golLama = row.querySelector('.b-gollama').value;
+        const golBaru = row.querySelector('.b-golbaru').value;
+        const tahapan = row.querySelector('.b-tahapan').value;
+        const status = row.querySelector('.b-status').value;
+        const verif = row.querySelector('.b-verif').value;
+        const periode = row.querySelector('.b-periode').value;
+
+        if (!nip || !nama || !unit || !jabatan || !jenisKp || !golLama || !golBaru || !tahapan || !status || !verif || !periode) {
+          isValid = false;
+        }
+
+        batchList.push({
+          rowIndex: row.dataset.rowIndex || '',
+          tanggalUsulMasuk: row.querySelector('.b-tgl').value,
+          nip: nip,
+          namaPegawai: nama,
+          unitKerja: unit,
+          jenisJabatan: jabatan,
+          jenisKp: jenisKp,
+          golonganLama: golLama,
+          golonganBaru: golBaru,
+          periodeKp: periode ? periode + '-01' : '',
+          tahapanUsulan: tahapan,
+          statusAkhir: status,
+          verifikator: verif,
+          catatanTms: row.querySelector('.b-catatan').value || '-'
+        });
+      });
+
+      if (!isValid) {
+        alert("Harap isi seluruh kolom wajib (*) pada setiap baris usulan!");
+        return;
+      }
+
+      const btn = document.getElementById('btnSaveBatch');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Menyimpan...';
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(res) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Semua Batch';
+          if (res.success) {
+            showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Berhasil! ' + res.message);
+            closeFormModal();
+            loadDashboardData();
+          } else {
+            if (res.isDuplicate) showDuplicateWarning(res.message);
+            else showAlert('bg-rose-100 text-rose-800 border border-rose-300', 'Gagal: ' + res.message);
+          }
+        }).saveBatchUsulanData(batchList);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Semua Batch';
+        showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Simulasi batch disimpan.');
+        closeFormModal();
+      }
+    }
+
+    function showDuplicateWarning(msg) {
+      document.getElementById('duplicateModalMessage').textContent = msg;
+      document.getElementById('duplicateModal').classList.remove('hidden');
+    }
+
+    function closeDuplicateModal() {
+      document.getElementById('duplicateModal').classList.add('hidden');
+    }
+
+    function togglePassword() {
+      const p = document.getElementById('loginPass');
+      const icon = document.getElementById('eyeIcon');
+      if (p.type === 'password') {
+        p.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        p.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    function formatTanggalIndo(val) {
+      if (!val) return '-';
+      let str = val.toString().trim();
+      if (str.includes('T')) str = str.split('T')[0];
+      
+      const parts = str.split('-');
+      if (parts.length === 3) {
+        const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agus', 'Sep', 'Okt', 'Nov', 'Des'];
+        const y = parts[0];
+        const m = parseInt(parts[1], 10) - 1;
+        const d = parseInt(parts[2], 10);
+        if (!isNaN(m) && monthsShort[m]) return `${d} ${monthsShort[m]} ${y}`;
+      }
+      return str;
+    }
+
+    function parsePeriodeSafe(val) {
+      if (!val) return '';
+      const str = val.toString().trim();
+      if (str.includes('T') || str.includes('Z')) {
+        const d = new Date(str);
+        if (!isNaN(d.getTime())) {
+          const wibDate = new Date(d.getTime() + (7 * 60 * 60 * 1000));
+          const y = wibDate.getUTCFullYear();
+          const m = String(wibDate.getUTCMonth() + 1).padStart(2, '0');
+          return `${y}-${m}`;
+        }
+      }
+      if (str.includes('-')) {
+        const parts = str.split('-');
+        if (parts.length >= 2) return `${parts[0]}-${parts[1].padStart(2, '0')}`;
+      }
+      return str.substring(0, 7);
+    }
+
+    function formatPeriodeBulanTahun(val) {
+      if (!val) return '-';
+      const cleanVal = parsePeriodeSafe(val);
+      const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      if (cleanVal.includes('-')) {
+        const parts = cleanVal.split('-');
+        const y = parts[0];
+        const m = parseInt(parts[1], 10) - 1;
+        if (!isNaN(m) && months[m]) return `${months[m]} ${y}`;
+      }
+      return cleanVal;
+    }
+
+    function loadVerifikatorList() {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(list) {
+          if (list && list.length > 0) {
+            globalVerifikatorList = list;
+            populateFormVerifikator(list);
+          }
+        }).getVerifikatorList();
+      } else {
+        globalVerifikatorList = ["Friska Gustina", "Meci Anggraini"];
+        populateFormVerifikator(globalVerifikatorList);
+      }
+    }
+
+    function populateFormVerifikator(items) {
+      const selectSingle = document.getElementById('formVerifikator');
+      selectSingle.innerHTML = '<option value="" disabled selected>Pilih Verifikator</option>';
+      
+      items.sort().forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item; opt.textContent = item;
+        selectSingle.appendChild(opt);
+      });
+    }
+
+    function openGuideModal() {
+      document.getElementById('guideModal').classList.remove('hidden');
+    }
+
+    function closeGuideModal() {
+      document.getElementById('guideModal').classList.add('hidden');
+    }
+
+    // Mengambil PDF panduan langsung dari folder Google Drive melalui Code.gs
+    // Mengambil PDF panduan langsung dari folder Google Drive melalui Code.gs
+    function downloadGuidePDF() {
+      const btn = document.querySelector('#guideModal button[onclick="downloadGuidePDF()"]');
+      const originalHtml = btn ? btn.innerHTML : '';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-70', 'cursor-wait');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan PDF...';
+      }
+
+      if (typeof google === 'undefined' || !google.script || !google.script.run) {
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-70', 'cursor-wait');
+          btn.innerHTML = originalHtml;
+        }
+        alert('Fitur download PDF hanya dapat digunakan melalui aplikasi LANTIK-PNS yang dipublikasikan sebagai Google Apps Script Web App.');
+        return;
+      }
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-70', 'cursor-wait');
+            btn.innerHTML = originalHtml;
+          }
+
+          if (res && res.success && res.url) {
+            window.open(res.url, '_blank', 'noopener,noreferrer');
+          } else {
+            alert((res && res.message) || 'File PDF panduan tidak ditemukan pada folder Google Drive.');
+          }
+        })
+        .withFailureHandler(function(err) {
+          if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-70', 'cursor-wait');
+            btn.innerHTML = originalHtml;
+          }
+
+          console.error('getGuidePdfUrl error:', err);
+          alert('Tidak dapat mengambil PDF panduan dari Google Drive. Pastikan folder dan file PDF dapat diakses oleh akun/deployment Apps Script.');
+        })
+        .getGuidePdfUrl();
+    }
+
+    function exportToExcel() {
+      if (!filteredData || filteredData.length === 0) {
+        alert("Tidak ada data untuk diexport!");
+        return;
+      }
+      const excelData = filteredData.map((d, index) => ({
+        "No": index + 1,
+        "Tanggal Usul": formatTanggalIndo(d['TANGGAL USUL MASUK']),
+        "NIP": d['NIP'] || '-',
+        "Nama Pegawai": d['NAMA PEGAWAI'] || '-',
+        "Unit Kerja": d['UNIT KERJA'] || '-',
+        "Jenis Jabatan": d['JENIS JABATAN'] || '-',
+        "Jenis KP": d['JENIS KP'] || '-',
+        "Golongan Lama": d['GOLONGAN LAMA'] || '-',
+        "Golongan Baru": d['GOLONGAN BARU'] || '-',
+        "Periode KP": formatPeriodeBulanTahun(d['PERIODE KP']),
+        "Tahapan Usulan": d['TAHAPAN USULAN'] || '-',
+        "Status Akhir": d['STATUS AKHIR'] || '-',
+        "Verifikator": d['VERIFIKATOR'] || '-',
+        "Catatan TMS/BTS": d['CATATAN TMS/BTS'] || d['CATATAN TMS/BTL'] || '-'
+      }));
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Data Usulan KP");
+      XLSX.writeFile(workbook, `Rekap_Usulan_KP_LANTIK_PNS.xlsx`);
+    }
+
+    function openLoginModal() { 
+      document.getElementById('loginModal').classList.remove('hidden');
+    }
+    
+    function closeLoginModal() { 
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    function handleModalLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('loginUser').value;
+      const p = document.getElementById('loginPass').value;
+      const alertBox = document.getElementById('loginAlert');
+      const btn = document.getElementById('btnLogin');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Memeriksa...';
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(res) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Verifikasi & Masuk</span> <i class="fa-solid fa-right-to-bracket text-xs"></i>';
+          if (res.success) {
+            isAuthenticated = true;
+            closeLoginModal();
+            updateUIAfterLogin();
+          } else {
+            document.getElementById('loginAlertText').textContent = res.message || 'Username atau Password salah!';
+            alertBox.classList.remove('hidden');
+          }
+        }).checkLogin(u, p);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Verifikasi & Masuk</span> <i class="fa-solid fa-right-to-bracket text-xs"></i>';
+        if (u === 'admin' && p === 'admin123') {
+          isAuthenticated = true;
+          closeLoginModal();
+          updateUIAfterLogin();
+        } else {
+          document.getElementById('loginAlertText').textContent = 'Username atau Password salah!';
+          alertBox.classList.remove('hidden');
+        }
+      }
+    }
+
+    function updateUIAfterLogin() {
+      setVerifikatorGuideMode(true);
+
+      document.getElementById('btnLogout').classList.remove('hidden');
+      document.getElementById('btnLoginNav').classList.add('hidden');
+      document.getElementById('userInfo').classList.remove('hidden');
+      document.getElementById('userInfo').classList.add('flex');
+      document.getElementById('verifikatorMenuSection').classList.remove('hidden');
+      document.getElementById('verifikatorMenuSection').classList.remove('flex');
+      document.getElementById('verifikatorMenuSection').classList.add('flex');
+      renderTable();
+      showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Login Berhasil! Menu verifikator telah diaktifkan.');
+    }
+
+    function toggleAuditLogModal() {
+      if (!isAuthenticated) {
+        openLoginModal();
+        return;
+      }
+      document.getElementById('auditLogModal').classList.remove('hidden');
+      loadAuditLogData();
+    }
+
+    function closeAuditLogModal() {
+      document.getElementById('auditLogModal').classList.add('hidden');
+    }
+
+    function loadAuditLogData() {
+      const tbody = document.getElementById('auditLogTableBody');
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-slate-400 font-medium text-xs"><i class="fa-solid fa-spinner animate-spin mr-2"></i>Memuat data riwayat...</td></tr>';
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(res) {
+          try {
+            auditLogData = typeof res === 'string' ? JSON.parse(res) : res;
+          } catch(e) {
+            auditLogData = [];
+          }
+          renderAuditLogTable();
+        }).getAuditLogData();
+      } else {
+        auditLogData = [
+          { "WAKTU": "2026-08-23 10:15:20", "AKSI": "TAMBAH", "VERIFIKATOR": "Friska Gustina", "TARGET": "Mera Octavia S.Pd (197904302008012003)", "RINCIAN": "Menambahkan usulan KP Periode 2026-08" }
+        ];
+        renderAuditLogTable();
+      }
+    }
+
+    function renderAuditLogTable() {
+      const q = (document.getElementById('searchAuditInput').value || '').toLowerCase();
+      const tbody = document.getElementById('auditLogTableBody');
+      const countEl = document.getElementById('auditLogCount');
+      tbody.innerHTML = '';
+
+      const filtered = auditLogData.filter(item => {
+        const str = `${item['WAKTU'] || ''} ${item['AKSI'] || ''} ${item['VERIFIKATOR'] || ''} ${item['TARGET'] || ''} ${item['RINCIAN'] || ''}`.toLowerCase();
+        return str.includes(q);
+      });
+
+      countEl.textContent = `Total ${filtered.length} catatan aktivitas`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-slate-400 font-medium text-xs">Belum ada catatan aktivitas.</td></tr>';
+        return;
+      }
+
+      filtered.forEach(log => {
+        let badgeClass = 'bg-slate-100 text-slate-700 border-slate-200';
+        const aksi = (log['AKSI'] || '').toUpperCase();
+        if (aksi === 'TAMBAH' || aksi === 'BATCH_TAMBAH') badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        else if (aksi === 'EDIT' || aksi === 'BATCH_EDIT') badgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
+        else if (aksi === 'HAPUS') badgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors border-b border-slate-100 text-[11px]';
+        tr.innerHTML = `
+          <td class="whitespace-nowrap font-mono text-slate-500">${log['WAKTU'] || '-'}</td>
+          <td class="whitespace-nowrap">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${badgeClass}">
+              ${log['AKSI'] || '-'}
+            </span>
+          </td>
+          <td class="whitespace-nowrap font-bold text-slate-800">${log['VERIFIKATOR'] || '-'}</td>
+          <td class="whitespace-nowrap font-medium text-slate-700">${log['TARGET'] || '-'}</td>
+          <td class="text-slate-600 leading-relaxed min-w-[250px]">${log['RINCIAN'] || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleLogout() {
+      setVerifikatorGuideMode(false);
+
+      isAuthenticated = false;
+      document.getElementById('btnLogout').classList.add('hidden');
+      document.getElementById('btnLoginNav').classList.remove('hidden');
+      document.getElementById('userInfo').classList.add('hidden');
+      document.getElementById('userInfo').classList.remove('flex');
+      document.getElementById('verifikatorMenuSection').classList.add('hidden');
+      document.getElementById('verifikatorMenuSection').classList.remove('flex');
+      closeFormModal();
+      renderTable();
+      showAlert('bg-slate-100 text-slate-800 border border-slate-300', 'Anda telah keluar dari sesi verifikator.');
+    }
+
+    function loadDashboardData() {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(response) {
+          rawData = JSON.parse(response);
+          rawData.forEach(d => { if (d['PERIODE KP']) d['PERIODE KP'] = parsePeriodeSafe(d['PERIODE KP']); });
+          initDashboard();
+        }).getDashboardData();
+      } else {
+        rawData = [
+          {"rowIndex": 2, "NIP": "197904302008012003", "NAMA PEGAWAI": "Mera Octavia S.Pd", "UNIT KERJA": "Dinas Pendidikan dan Kebudayaan", "JENIS JABATAN": "Fungsional Tertentu", "VERIFIKATOR": "Friska Gustina", "PERIODE KP": "2026-08", "JENIS KP": "Fungsional", "GOLONGAN LAMA": "III/b", "GOLONGAN BARU": "III/c", "TAHAPAN USULAN": "2. Verifikasi BKN", "STATUS AKHIR": "Pertek BKN", "CATATAN TMS/BTS": "SK Jabatan Fungsional belum dilegalisir", "TANGGAL USUL MASUK": "2026-06-17"}
+        ];
+        initDashboard();
+      }
+    }
+
+    function initDashboard() {
+      populateDropdownOptions();
+      applyFilters();
+    }
+
+    function populateDropdownOptions() {
+      const periodes = [...new Set(rawData.map(d => parsePeriodeSafe(d['PERIODE KP'])))].filter(Boolean);
+      const units = [...new Set(rawData.map(d => d['UNIT KERJA']))].filter(Boolean);
+      const statuses = [...new Set(rawData.map(d => d['STATUS AKHIR']))].filter(Boolean);
+      const jenisKp = [...new Set(rawData.map(d => d['JENIS KP']))].filter(Boolean);
+      const verifikators = [...new Set(rawData.map(d => d['VERIFIKATOR']))].filter(Boolean);
+
+      fillSelectPeriode('filterPeriode', periodes);
+      fillSelectPeriode('tableFilterPeriode', periodes);
+      fillSelect('filterUnit', units);
+      fillSelect('filterStatus', statuses);
+      fillSelect('filterJenis', jenisKp);
+      fillSelect('filterVerifikator', verifikators);
+    }
+
+    function fillSelectPeriode(id, items) {
+      const select = document.getElementById(id);
+      if (!select) return;
+      const firstOpt = select.options[0];
+      select.innerHTML = '';
+      select.appendChild(firstOpt);
+      items.sort().reverse().forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item;
+        opt.textContent = formatPeriodeBulanTahun(item);
+        select.appendChild(opt);
+      });
+    }
+
+    function fillSelect(id, items) {
+      const select = document.getElementById(id);
+      if (!select) return;
+      const firstOpt = select.options[0];
+      select.innerHTML = '';
+      select.appendChild(firstOpt);
+      items.sort().forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item;
+        opt.textContent = item;
+        select.appendChild(opt);
+      });
+    }
+
+    function applyFilters() {
+      const pVal = document.getElementById('filterPeriode').value;
+      const uVal = document.getElementById('filterUnit').value;
+      const sVal = document.getElementById('filterStatus').value;
+      const jVal = document.getElementById('filterJenis').value;
+      const vVal = document.getElementById('filterVerifikator').value;
+
+      filteredData = rawData.filter(d => {
+        const pKp = parsePeriodeSafe(d['PERIODE KP']);
+        return (pVal === 'ALL' || pKp === pVal) &&
+               (uVal === 'ALL' || d['UNIT KERJA'] === uVal) &&
+               (sVal === 'ALL' || d['STATUS AKHIR'] === sVal) &&
+               (jVal === 'ALL' || d['JENIS KP'] === jVal) &&
+               (vVal === 'ALL' || d['VERIFIKATOR'] === vVal);
+      });
+
+      currentPage = 1;
+      renderKPIs();
+      renderCharts();
+      renderTable();
+    }
+
+    function resetFilters() {
+      document.getElementById('filterPeriode').value = 'ALL';
+      document.getElementById('filterUnit').value = 'ALL';
+      document.getElementById('filterStatus').value = 'ALL';
+      document.getElementById('filterJenis').value = 'ALL';
+      document.getElementById('filterVerifikator').value = 'ALL';
+      document.getElementById('tableFilterPeriode').value = 'ALL';
+      document.getElementById('searchInput').value = '';
+      applyFilters();
+    }
+
+    function handleTableFilterChange() { currentPage = 1; renderTable(); }
+    function handleSearch() { currentPage = 1; renderTable(); }
+
+    function renderKPIs() {
+      document.getElementById('kpiTotal').textContent = filteredData.length;
+      document.getElementById('kpiMS').textContent = filteredData.filter(d => d['STATUS AKHIR'] === 'Memenuhi Syarat (MS)').length;
+      document.getElementById('kpiBTS').textContent = filteredData.filter(d => d['STATUS AKHIR'] === 'Berkas Tidak Sesuai (BTS)' || (d['STATUS AKHIR'] && d['STATUS AKHIR'].includes('BTL'))).length;
+      document.getElementById('kpiTMS').textContent = filteredData.filter(d => d['STATUS AKHIR'] === 'Tidak Memenuhi Syarat (TMS)').length;
+      document.getElementById('kpiPertek').textContent = filteredData.filter(d => d['STATUS AKHIR'] === 'Pertek BKN').length;
+      document.getElementById('kpiSK').textContent = filteredData.filter(d => d['STATUS AKHIR'] === 'SK Ditetapkan').length;
+    }
+
+    function renderCharts() {
+      if (!filteredData || filteredData.length === 0) return;
+
+      const unitCounts = {};
+      filteredData.forEach(d => {
+        const u = d['UNIT KERJA'] ? d['UNIT KERJA'].toString().trim() : '';
+        if (u) unitCounts[u] = (unitCounts[u] || 0) + 1;
+      });
+
+      const units = Object.keys(unitCounts).sort((a, b) => unitCounts[b] - unitCounts[a]);
+      const getStatus = (d) => (d['STATUS AKHIR'] ? d['STATUS AKHIR'].toString().trim() : '');
+
+      const skData = units.map(u => filteredData.filter(d => d['UNIT KERJA'] === u && getStatus(d) === 'SK Ditetapkan').length);
+      const pertekData = units.map(u => filteredData.filter(d => d['UNIT KERJA'] === u && getStatus(d) === 'Pertek BKN').length);
+      const msData = units.map(u => filteredData.filter(d => d['UNIT KERJA'] === u && getStatus(d) === 'Memenuhi Syarat (MS)').length);
+      const btsData = units.map(u => filteredData.filter(d => {
+        if (d['UNIT KERJA'] !== u) return false;
+        const st = getStatus(d);
+        return st === 'Berkas Tidak Sesuai (BTS)' || st === 'Bahan Tidak Sesuai (BTS)' || st.includes('BTL');
+      }).length);
+      const tmsData = units.map(u => filteredData.filter(d => d['UNIT KERJA'] === u && getStatus(d) === 'Tidak Memenuhi Syarat (TMS)').length);
+
+      if (chartObjUnit) chartObjUnit.destroy();
+      chartObjUnit = new Chart(document.getElementById('chartUnit'), {
+        type: 'bar',
+        data: { 
+          labels: units, 
+          datasets: [
+            { label: 'SK Ditetapkan', data: skData, backgroundColor: '#8b5cf6' },
+            { label: 'Pertek BKN', data: pertekData, backgroundColor: '#06b6d4' },
+            { label: 'MS', data: msData, backgroundColor: '#10b981' },
+            { label: 'BTS', data: btsData, backgroundColor: '#f59e0b' },
+            { label: 'TMS', data: tmsData, backgroundColor: '#f43f5e' }
+          ] 
+        },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+      });
+
+      const tahapanMap = {};
+      filteredData.forEach(d => tahapanMap[d['TAHAPAN USULAN'] || 'Lainnya'] = (tahapanMap[d['TAHAPAN USULAN'] || 'Lainnya'] || 0) + 1);
+      if (chartObjBerkas) chartObjBerkas.destroy();
+      chartObjBerkas = new Chart(document.getElementById('chartStatusBerkas'), {
+        type: 'doughnut',
+        data: { 
+          labels: Object.keys(tahapanMap), 
+          datasets: [{ 
+            data: Object.values(tahapanMap), 
+            backgroundColor: ['#ec4899', '#eab308', '#10b981', '#6366f1']
+          }] 
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      const jenisMap = {};
+      filteredData.forEach(d => jenisMap[d['JENIS KP'] || 'Lainnya'] = (jenisMap[d['JENIS KP'] || 'Lainnya'] || 0) + 1);
+      if (chartObjJenis) chartObjJenis.destroy();
+      chartObjJenis = new Chart(document.getElementById('chartJenisKP'), {
+        type: 'bar',
+        data: { labels: Object.keys(jenisMap), datasets: [{ label: 'Jumlah', data: Object.values(jenisMap), backgroundColor: '#6366f1' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+
+      const verifMap = {};
+      filteredData.forEach(d => verifMap[d['VERIFIKATOR'] || 'Lainnya'] = (verifMap[d['VERIFIKATOR'] || 'Lainnya'] || 0) + 1);
+      if (chartObjVerifikator) chartObjVerifikator.destroy();
+      chartObjVerifikator = new Chart(document.getElementById('chartVerifikator'), {
+        type: 'bar',
+        data: { labels: Object.keys(verifMap), datasets: [{ label: 'Berkas', data: Object.values(verifMap), backgroundColor: '#0284c7' }] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    }
+
+    function renderTable() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const tblPeriodeVal = document.getElementById('tableFilterPeriode').value;
+      const tbody = document.getElementById('tableBody');
+      const actionHeader = document.querySelector('.action-header');
+      tbody.innerHTML = '';
+
+      if (isAuthenticated) actionHeader.classList.remove('hidden');
+      else actionHeader.classList.add('hidden');
+
+      const searchFiltered = filteredData.filter(d => {
+        const pKp = parsePeriodeSafe(d['PERIODE KP']);
+        const matchPeriode = (tblPeriodeVal === 'ALL' || pKp === tblPeriodeVal);
+        const matchQuery = (d['NAMA PEGAWAI'] || '').toString().toLowerCase().includes(q) || 
+                           (d['NIP'] || '').toString().toLowerCase().includes(q);
+        return matchPeriode && matchQuery;
+      });
+
+      const totalItems = searchFiltered.length;
+
+      if (totalItems === 0) {
+        tbody.innerHTML = `<tr><td colspan="${isAuthenticated ? 10 : 9}" class="text-center py-10 text-slate-400 font-medium">Data usulan tidak ditemukan.</td></tr>`;
+        renderPaginationControls(0, 0, 0);
+        return;
+      }
+
+      const totalPages = Math.ceil(totalItems / rowsPerPage);
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * rowsPerPage;
+      const endIndex = Math.min(startIndex + rowsPerPage, totalItems);
+      const paginatedData = searchFiltered.slice(startIndex, endIndex);
+
+      paginatedData.forEach(row => {
+        let badgeStyle = 'bg-slate-100 text-slate-700 border-slate-200';
+        let statusDot = 'bg-slate-400';
+
+        if (row['STATUS AKHIR'] === 'Memenuhi Syarat (MS)') {
+          badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+          statusDot = 'bg-emerald-500';
+        } else if (row['STATUS AKHIR'] === 'SK Ditetapkan') {
+          badgeStyle = 'bg-purple-50 text-purple-700 border-purple-200';
+          statusDot = 'bg-purple-500';
+        } else if (row['STATUS AKHIR'] === 'Pertek BKN') {
+          badgeStyle = 'bg-cyan-50 text-cyan-700 border-cyan-200';
+          statusDot = 'bg-cyan-500';
+        } else if (row['STATUS AKHIR'] === 'Berkas Tidak Sesuai (BTS)' || (row['STATUS AKHIR'] && row['STATUS AKHIR'].includes('BTL'))) {
+          badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+          statusDot = 'bg-amber-500';
+        } else if (row['STATUS AKHIR'] === 'Tidak Memenuhi Syarat (TMS)') {
+          badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+          statusDot = 'bg-rose-500';
+        }
+
+        const tglUsulFormatted = formatTanggalIndo(row['TANGGAL USUL MASUK']);
+        const periodeFormatted = formatPeriodeBulanTahun(row['PERIODE KP']);
+        const catatanVal = row['CATATAN TMS/BTS'] || row['CATATAN TMS/BTL'] || '-';
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/80 transition-colors border-b border-slate-100 text-[11px]";
+        tr.innerHTML = `
+          <td class="whitespace-nowrap">
+            <div class="flex items-center gap-1.5 font-medium text-slate-700">
+              <i class="fa-regular fa-calendar-check text-blue-500 text-[10px]"></i>
+              <span>${tglUsulFormatted}</span>
+            </div>
+          </td>
+
+          <td class="whitespace-nowrap">
+            <div>
+              <div class="font-bold text-slate-800 hover:text-blue-600 transition-colors">${row['NAMA PEGAWAI'] || '-'}</div>
+              <div class="text-[9.5px] font-mono text-slate-400 mt-0.5">NIP: ${row['NIP'] || '-'}</div>
+            </div>
+          </td>
+
+          <td>
+            <div class="text-slate-700 font-medium leading-tight min-w-[200px]">
+              ${row['UNIT KERJA'] || '-'}
+            </div>
+          </td>
+
+          <td class="whitespace-nowrap text-center">
+            <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 border border-slate-200/60 font-mono text-[10px]">
+              <span class="font-bold text-slate-600">${row['GOLONGAN LAMA'] || '-'}</span>
+              <i class="fa-solid fa-arrow-right text-[8px] text-blue-500"></i>
+              <span class="font-bold text-blue-700">${row['GOLONGAN BARU'] || '-'}</span>
+            </div>
+          </td>
+
+          <td class="whitespace-nowrap">
+            <div class="font-bold text-slate-800">${row['JENIS KP'] || '-'}</div>
+            <div class="text-[9.5px] text-blue-600 font-semibold flex items-center gap-1 mt-0.5">
+              <i class="fa-solid fa-clock-rotate-left text-[8px]"></i>
+              <span>${periodeFormatted}</span>
+            </div>
+          </td>
+
+          <td class="whitespace-nowrap">
+            <span class="text-[10.5px] font-semibold text-slate-700 bg-slate-100/80 px-2 py-0.5 rounded border border-slate-200/50">
+              ${row['TAHAPAN USULAN'] || '-'}
+            </span>
+          </td>
+
+          <td class="whitespace-nowrap text-center">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${badgeStyle}">
+              <span class="w-1.5 h-1.5 rounded-full ${statusDot}"></span>
+              ${row['STATUS AKHIR'] || '-'}
+            </span>
+          </td>
+
+          <td class="whitespace-nowrap">
+            <div class="flex items-center gap-1 text-slate-700 font-medium">
+              <i class="fa-solid fa-user-check text-emerald-500 text-[9px]"></i>
+              <span>${row['VERIFIKATOR'] || '-'}</span>
+            </div>
+          </td>
+
+          <td>
+            ${catatanVal && catatanVal !== '-' ? `
+              <div class="min-w-[220px] p-1.5 rounded bg-rose-50 border border-rose-200 text-rose-800 font-medium text-[10.5px] leading-snug">
+                <i class="fa-solid fa-circle-exclamation mr-1 text-[9px] text-rose-600"></i>${catatanVal}
+              </div>` : `
+              <span class="text-slate-300 text-xs font-bold">-</span>
+            `}
+          </td>
+
+          ${isAuthenticated ? `
+            <td class="whitespace-nowrap text-center">
+              <div class="inline-flex items-center gap-1 p-1 bg-slate-100 border border-slate-200/80 rounded-xl">
+                <button onclick="editUsulan(${row['rowIndex']})" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[10px] font-bold shadow-sm transition active:scale-95 flex items-center gap-1" title="Edit Single">
+                  <i class="fa-solid fa-pen-to-square"></i> Single
+                </button>
+                <button onclick="editUsulanBatch(${row['rowIndex']})" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition active:scale-95 flex items-center gap-1" title="Edit Batch">
+                  <i class="fa-solid fa-layer-group"></i> Batch
+                </button>
+                <button onclick="deleteUsulan(${row['rowIndex']}, '${row['NIP']}')" class="p-1 px-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition active:scale-95" title="Hapus">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </td>` : ''}
+        `;
+        tbody.appendChild(tr);
+      });
+
+      renderPaginationControls(startIndex + 1, endIndex, totalItems);
+    }
+
+    function renderPaginationControls(start, end, total) {
+      const info = document.getElementById('paginationInfo');
+      const container = document.getElementById('paginationButtons');
+
+      if (total === 0) {
+        info.textContent = 'Menampilkan 0 - 0 dari 0 data';
+        container.innerHTML = '';
+        return;
+      }
+
+      info.textContent = `Menampilkan ${start} - ${end} dari ${total} data`;
+      container.innerHTML = '';
+
+      const totalPages = Math.ceil(total / rowsPerPage);
+      if (totalPages <= 1) return;
+
+      const btnFirst = document.createElement('button');
+      btnFirst.className = `px-2 py-0.5 rounded text-xs font-bold ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-200'}`;
+      btnFirst.innerHTML = '<i class="fa-solid fa-angles-left"></i>';
+      btnFirst.disabled = currentPage === 1;
+      btnFirst.onclick = () => goToPage(1);
+      container.appendChild(btnFirst);
+
+      const btnPrev = document.createElement('button');
+      btnPrev.className = `px-2 py-0.5 rounded text-xs font-semibold ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-200'}`;
+      btnPrev.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+      btnPrev.disabled = currentPage === 1;
+      btnPrev.onclick = () => goToPage(currentPage - 1);
+      container.appendChild(btnPrev);
+
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 4);
+
+      if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const btnNum = document.createElement('button');
+        btnNum.className = `px-2.5 py-1 rounded-lg text-xs font-bold transition ${i === currentPage ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'text-slate-600 hover:bg-slate-200'}`;
+        btnNum.textContent = i;
+        btnNum.onclick = () => goToPage(i);
+        container.appendChild(btnNum);
+      }
+
+      const btnNext = document.createElement('button');
+      btnNext.className = `px-2 py-0.5 rounded text-xs font-semibold ${currentPage === totalPages ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-200'}`;
+      btnNext.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+      btnNext.disabled = currentPage === totalPages;
+      btnNext.onclick = () => goToPage(currentPage + 1);
+      container.appendChild(btnNext);
+
+      const btnLast = document.createElement('button');
+      btnLast.className = `px-2 py-0.5 rounded text-xs font-bold ${currentPage === totalPages ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-200'}`;
+      btnLast.innerHTML = '<i class="fa-solid fa-angles-right"></i>';
+      btnLast.disabled = currentPage === totalPages;
+      btnLast.onclick = () => goToPage(totalPages);
+      container.appendChild(btnLast);
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderTable();
+    }
+
+    function editUsulan(rowIndex) {
+      const item = rawData.find(d => d.rowIndex === rowIndex);
+      if (!item) return;
+
+      openFormModal('single');
+
+      document.getElementById('formRowIndex').value = rowIndex;
+      document.getElementById('formNip').value = item['NIP'] || '';
+      document.getElementById('formNama').value = item['NAMA PEGAWAI'] || '';
+      document.getElementById('formUnit').value = item['UNIT KERJA'] || '';
+      document.getElementById('formJabatan').value = item['JENIS JABATAN'] || '';
+      document.getElementById('formJenisKp').value = item['JENIS KP'] || '';
+      document.getElementById('formGolLama').value = item['GOLONGAN LAMA'] || '';
+      document.getElementById('formGolBaru').value = item['GOLONGAN BARU'] || '';
+      document.getElementById('formPeriodeKp').value = parsePeriodeSafe(item['PERIODE KP']);
+      
+      let tgl = item['TANGGAL USUL MASUK'] || '';
+      if (tgl && tgl.includes('T')) tgl = tgl.split('T')[0];
+      document.getElementById('formTanggalUsul').value = tgl;
+      
+      document.getElementById('formTahapanUsulan').value = item['TAHAPAN USULAN'] || '';
+      document.getElementById('formStatusAkhir').value = item['STATUS AKHIR'] || '';
+      document.getElementById('formVerifikator').value = item['VERIFIKATOR'] || '';
+      document.getElementById('formCatatan').value = item['CATATAN TMS/BTS'] || item['CATATAN TMS/BTL'] || '-';
+
+      document.getElementById('btnSubmitText').textContent = 'Perbarui Data';
+    }
+
+    function editUsulanBatch(rowIndex) {
+      const item = rawData.find(d => d.rowIndex === rowIndex);
+      if (!item) return;
+
+      openFormModal('batch');
+      document.getElementById('batchTableBody').innerHTML = '';
+      addBatchRowTable(item);
+    }
+
+    function deleteUsulan(rowIndex, nip) {
+      if (!isAuthenticated) { openLoginModal(); return; }
+      if (!confirm(`Hapus usulan NIP: ${nip}?`)) return;
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(res) {
+          if (res.success) {
+            showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Berhasil! ' + res.message);
+            loadDashboardData();
+          } else {
+            showAlert('bg-rose-100 text-rose-800 border border-rose-300', 'Gagal: ' + res.message);
+          }
+        }).deleteUsulanData(rowIndex);
+      } else {
+        showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Simulasi: Data NIP ' + nip + ' dihapus.');
+        rawData = rawData.filter(d => d.rowIndex !== rowIndex);
+        initDashboard();
+      }
+    }
+
+    function resetFormToCreate() {
+      document.getElementById('formRowIndex').value = '';
+      const form = document.querySelector('#tabContentSingle form');
+      if (form) form.reset();
+      document.getElementById('btnSubmitText').textContent = 'Simpan Data';
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      if (!isAuthenticated) { openLoginModal(); return; }
+
+      const btn = document.getElementById('btnSubmitForm');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Menyimpan...';
+
+      let rawPeriode = document.getElementById('formPeriodeKp').value; 
+      
+      const formData = {
+        rowIndex: document.getElementById('formRowIndex').value,
+        nip: document.getElementById('formNip').value,
+        namaPegawai: document.getElementById('formNama').value,
+        unitKerja: document.getElementById('formUnit').value,
+        jenisJabatan: document.getElementById('formJabatan').value,
+        jenisKp: document.getElementById('formJenisKp').value,
+        golonganLama: document.getElementById('formGolLama').value,
+        golonganBaru: document.getElementById('formGolBaru').value,
+        periodeKp: rawPeriode ? rawPeriode + '-01' : '',
+        tanggalUsulMasuk: document.getElementById('formTanggalUsul').value,
+        tahapanUsulan: document.getElementById('formTahapanUsulan').value,
+        statusAkhir: document.getElementById('formStatusAkhir').value,
+        verifikator: document.getElementById('formVerifikator').value,
+        catatanTms: document.getElementById('formCatatan').value
+      };
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(res) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-floppy-disk text-xs"></i> <span id="btnSubmitText">${formData.rowIndex ? 'Perbarui Data' : 'Simpan Data'}</span>`;
+          if (res.success) {
+            showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Berhasil! ' + res.message);
+            closeFormModal();
+            loadDashboardData();
+          } else {
+            if (res.isDuplicate) showDuplicateWarning(res.message);
+            else showAlert('bg-rose-100 text-rose-800 border border-rose-300', 'Gagal: ' + res.message);
+          }
+        }).saveUsulanData(formData);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-floppy-disk text-xs"></i> <span id="btnSubmitText">Simpan Data</span>`;
+        showAlert('bg-emerald-100 text-emerald-800 border border-emerald-300', 'Berhasil! Data simulasi disimpan.');
+        closeFormModal();
+      }
+    }
+
+    function showAlert(cssClass, text) {
+      const box = document.getElementById('appAlert');
+      box.className = 'p-3 rounded-xl font-medium text-xs sm:text-sm flex items-center justify-between ' + cssClass;
+      box.innerHTML = `<span>${text}</span> <button onclick="this.parentElement.classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>`;
+      box.classList.remove('hidden');
+    }
+
+    function setVerifikatorGuideMode(active) {
+      document.body.classList.toggle('verifikator-mode', !!active);
+      const elements = [document.getElementById('publicGuideCardWrapper')];
+      elements.forEach(function(el) { if (el) el.style.display = active ? 'none' : ''; });
+    }
+  </script>
+
+</body>
+</html>
